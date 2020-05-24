@@ -7,8 +7,8 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table
 @Data
+@Table(name = "accounts")
 public class Account {
     private @Id String userName;
 
@@ -16,7 +16,7 @@ public class Account {
 
     private String salt;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Strategy> strategies;
 
     public Account() {
