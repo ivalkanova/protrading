@@ -1,18 +1,17 @@
-package com.trading.protrading.data.rules;
+package com.trading.protrading.model.rule;
 
-import com.trading.protrading.data.Strategy;
+import com.trading.protrading.model.StrategyModel;
 import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
 
 @Entity
 @Data
-public class OpenRule extends Rule {
+public class CloseRuleModel extends RuleModel {
 
     @OneToOne
     @JoinColumn(name = "strategyId", referencedColumnName = "id")
-    private Strategy strategy;
+    private StrategyModel strategyModel;
 }
