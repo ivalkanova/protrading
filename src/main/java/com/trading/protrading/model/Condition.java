@@ -1,6 +1,6 @@
 package com.trading.protrading.model;
 
-import com.trading.protrading.model.rule.RuleModel;
+import com.trading.protrading.model.rule.Rule;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "conditions")
-public class ConditionModel {
+public class Condition {
 
     @Id
     @GeneratedValue
@@ -17,5 +17,5 @@ public class ConditionModel {
     private String predicate;
     @ManyToOne
     @JoinColumn(nullable = false, referencedColumnName = "id", name = "ruleId")
-    private RuleModel ruleModel;
+    private Rule rule;
 }

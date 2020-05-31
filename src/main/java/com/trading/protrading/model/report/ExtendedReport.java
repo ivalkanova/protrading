@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 
 @Entity
 @Data
-public class ExtendedReportModel extends ReportModel {
+public class ExtendedReport extends Report {
 
     private Double maxDrawdown;
     private Double returnToDrawdown;

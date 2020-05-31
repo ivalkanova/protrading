@@ -1,6 +1,6 @@
 package com.trading.protrading.model.report;
 
-import com.trading.protrading.model.StrategyModel;
+import com.trading.protrading.model.Strategy;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Data
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "reports")
-public abstract class ReportModel {
+public abstract class Report {
 
     private @Id
     Long id;
@@ -18,5 +18,5 @@ public abstract class ReportModel {
     private Double profitFactor;
     @ManyToOne
     //@JoinColumn(name = "strategyId", referencedColumnName = "id")
-    private StrategyModel strategyModel;
+    private Strategy strategy;
 }

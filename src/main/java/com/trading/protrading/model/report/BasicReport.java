@@ -6,6 +6,6 @@ import javax.persistence.*;
 
 @Entity
 @Data
-public class BasicReportModel extends ReportModel {
+public class BasicReport extends Report {
 
 }

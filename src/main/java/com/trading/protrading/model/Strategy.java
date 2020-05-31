@@ -1,8 +1,8 @@
 package com.trading.protrading.model;
 
-import com.trading.protrading.model.report.ReportModel;
-import com.trading.protrading.model.rule.OpenRuleModel;
-import com.trading.protrading.model.rule.RuleModel;
+import com.trading.protrading.model.report.Report;
+import com.trading.protrading.model.rule.OpenRule;
+import com.trading.protrading.model.rule.Rule;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,7 +11,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "strategies")
-public class StrategyModel {
+public class Strategy {
 
     @Id
     @GeneratedValue
@@ -19,23 +19,23 @@ public class StrategyModel {
     private String name;
     @ManyToOne
     @JoinColumn(nullable = false, name = "userName", referencedColumnName = "userName")
-    private AccountModel user;
-    @OneToMany(mappedBy = "strategyModel", targetEntity = ReportModel.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<ReportModel> reportModels;
+    private Account user;
+    @OneToMany(mappedBy = "strategy", targetEntity = Report.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Report> reports;
     @OneToOne(optional = false)
     @JoinColumn(name = "openRuleId", referencedColumnName = "id")
-    private OpenRuleModel openRuleModel;
+    private OpenRule openRule;
     @OneToOne(optional = false)
     @JoinColumn(name = "closeRuleId", referencedColumnName = "id")
-    private RuleModel closeRuleModel;
+    private Rule closeRule;
     @OneToOne(optional = false)
     @JoinColumn(name = "buyRuleId", referencedColumnName = "id")
-    private RuleModel buyRuleModel;
+    private Rule buyRule;
     @OneToOne(optional = false)
     @JoinColumn(name = "sellRuleId", referencedColumnName = "id")
-    private RuleModel sellRuleModel;
+    private Rule sellRule;
 
-    public StrategyModel() {
+    public Strategy() {
 
     }
 
