@@ -1,8 +1,6 @@
 package com.trading.protrading.model;
 
 import com.trading.protrading.model.report.Report;
-import com.trading.protrading.model.rule.OpenRule;
-import com.trading.protrading.model.rule.Rule;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -18,22 +16,12 @@ public class Strategy {
     private Long id;
     private String name;
     @ManyToOne
-    @JoinColumn(nullable = false, name = "userName", referencedColumnName = "userName")
+    @JoinColumn(nullable = false, name = "userId", referencedColumnName = "id")
     private Account user;
     @OneToMany(mappedBy = "strategy", targetEntity = Report.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Report> reports;
-    @OneToOne(optional = false)
-    @JoinColumn(name = "openRuleId", referencedColumnName = "id")
-    private OpenRule openRule;
-    @OneToOne(optional = false)
-    @JoinColumn(name = "closeRuleId", referencedColumnName = "id")
-    private Rule closeRule;
-    @OneToOne(optional = false)
-    @JoinColumn(name = "buyRuleId", referencedColumnName = "id")
-    private Rule buyRule;
-    @OneToOne(optional = false)
-    @JoinColumn(name = "sellRuleId", referencedColumnName = "id")
-    private Rule sellRule;
+    @OneToMany(mappedBy = "strategy", targetEntity = Rule.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Rule> rules;
 
     public Strategy() {
 

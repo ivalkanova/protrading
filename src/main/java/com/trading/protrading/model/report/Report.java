@@ -9,14 +9,15 @@ import javax.persistence.*;
 @Data
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "reports")
-public abstract class Report {
+public class Report {
 
-    private @Id
-    Long id;
+    @Id
+    @GeneratedValue
+    private Long id;
     private Double totalReturn;
     private Double winLossRatio;
     private Double profitFactor;
     @ManyToOne
-    //@JoinColumn(name = "strategyId", referencedColumnName = "id")
+    @JoinColumn(nullable = false, name = "strategyId", referencedColumnName = "id")
     private Strategy strategy;
 }

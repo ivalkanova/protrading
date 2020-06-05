@@ -10,8 +10,11 @@ import java.util.Set;
 @Table(name = "accounts")
 public class Account {
 
-    private @Id
-    String userName;
+    @Id
+    @GeneratedValue
+    private Long id;
+    @Column(unique = true)
+    private String userName;
     private String password;
     private String salt;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
