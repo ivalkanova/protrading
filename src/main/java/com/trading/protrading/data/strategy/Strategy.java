@@ -1,13 +1,13 @@
 package com.trading.protrading.data.strategy;
 
+import java.util.Set;
+
 public class Strategy {
 
-    private Asset asset;
     private String name;
+    private Asset asset;
     private double transactionBuyFunds;
-    private int transactionSellAmount;
-    private Rule open;
-    private Rule close;
-    private Rule buy;
-    private Rule sell;
+    //delete  private int transactionSellAmount;
+    private Set<Rule> rules;
+
 }
