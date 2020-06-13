@@ -16,7 +16,7 @@ public class Strategy {
     private Long id;
     private String name;
     @ManyToOne
-    @JoinColumn(nullable = false, name = "userId", referencedColumnName = "id")
+    @JoinColumn(nullable = false, referencedColumnName = "id", name = "userId")
     private Account user;
     @OneToMany(mappedBy = "strategy", targetEntity = Report.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Report> reports;
