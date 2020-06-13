@@ -1,5 +1,5 @@
 package com.trading.protrading.data.strategy;
 
-public enum TransactionType {
-    BUY, SELL
+public enum PositionType {
+    LONG, SHORT
 }

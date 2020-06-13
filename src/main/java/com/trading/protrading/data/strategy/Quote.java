@@ -6,10 +6,10 @@ import java.time.LocalDateTime;
 public class Quote {
     private Asset asset;
     private double price;
-    private TransactionType type;
+    private PositionType type;
     private LocalDateTime date;
 
-    public Quote( Asset asset, double price, TransactionType type, LocalDateTime date) {
+    public Quote(Asset asset, double price, PositionType type, LocalDateTime date) {
         this.asset = asset;
         this.price = price;
         this.type = type;
@@ -24,7 +24,7 @@ public class Quote {
         return price;
     }
 
-    public TransactionType getType() {
+    public PositionType getType() {
         return type;
     }
 
