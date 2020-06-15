@@ -9,7 +9,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "strategies")
-public class Strategy {
+public class StrategyModel {
 
     @Id
     @GeneratedValue
@@ -23,7 +23,7 @@ public class Strategy {
     @OneToMany(mappedBy = "strategy", targetEntity = Rule.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Rule> rules;
 
-    public Strategy() {
+    public StrategyModel() {
 
     }
 

@@ -1,6 +1,6 @@
 package com.trading.protrading.model.report;
 
-import com.trading.protrading.model.Strategy;
+import com.trading.protrading.model.StrategyModel;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,5 +19,9 @@ public class Report {
     private Double profitFactor;
     @ManyToOne
     @JoinColumn(nullable = false, name = "strategyId", referencedColumnName = "id")
-    private Strategy strategy;
+    private StrategyModel strategy;
+
+    public Long getId() {
+        return id;
+    }
 }

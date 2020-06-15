@@ -1,10 +1,12 @@
 package com.trading.protrading.repository;
 
-import com.trading.protrading.model.Strategy;
+import com.trading.protrading.model.StrategyModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface StrategyRepository extends JpaRepository<Strategy, Long> {
+import java.util.LinkedList;
 
+@Repository
+public interface StrategyRepository extends JpaRepository<StrategyModel, Long> {
+    LinkedList<StrategyModel> getAllByNameAndUser_UserName(String strategyName, String username);
 }

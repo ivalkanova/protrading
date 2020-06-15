@@ -19,5 +19,5 @@ public class Rule {
     private Double takeProfit;
     @ManyToOne
     @JoinColumn(nullable = false, referencedColumnName = "id", name = "strategyId")
-    private Strategy strategy;
+    private StrategyModel strategy;
 }
