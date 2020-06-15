@@ -1,12 +1,9 @@
 package com.trading.protrading.backtesting;
 
-import com.trading.protrading.data.strategy.PositionType;
-
 public class Trade {
     private double fundsSpend;
     private double fundsReceived;
     private double assetAmount;
-    // private PositionType type;
 
 
     public Trade() {
@@ -24,6 +21,14 @@ public class Trade {
         fundsReceived = assetAmount * price;
         assetAmount = 0;
         fundsSpend = 0;
+        return fundsReceived;
+    }
+
+    public double getFundsSpend() {
+        return fundsSpend;
+    }
+
+    public double getFundsReceived() {
         return fundsReceived;
     }
 }
