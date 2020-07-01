@@ -1,4 +1,4 @@
-package testdata;
+package com.trading.protrading.marketdata;
 
 import com.trading.protrading.data.strategy.Quote;
 
