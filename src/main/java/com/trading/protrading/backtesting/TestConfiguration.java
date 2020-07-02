@@ -1,24 +1,33 @@
 package com.trading.protrading.backtesting;
 
-import com.trading.protrading.data.strategy.ReportType;
+import com.trading.protrading.data.strategy.Asset;
 
 import java.time.LocalDateTime;
 
 public class TestConfiguration {
    private String username;
    private String strategyName;
-   private ReportType reportType;
+   private Asset asset;
    private LocalDateTime start;
    private LocalDateTime end;
    private double funds;
 
-    public TestConfiguration(String username, String strategyName, ReportType reportType, LocalDateTime start, LocalDateTime end, double initialFunds) {
+    public TestConfiguration(String username,
+                             String strategyName,
+                             Asset asset,
+                             LocalDateTime start,
+                             LocalDateTime end,
+                             double funds) {
         this.username = username;
         this.strategyName = strategyName;
-        this.reportType = reportType;
+        this.asset = asset;
         this.start = start;
         this.end = end;
-        this.funds = initialFunds;
+        this.funds = funds;
+    }
+
+    public Asset getAsset() {
+        return asset;
     }
 
     public String getUsername() {
@@ -27,10 +36,6 @@ public class TestConfiguration {
 
     public String getStrategyName() {
         return strategyName;
-    }
-
-    public ReportType getReportType() {
-        return reportType == null ? ReportType.STANDART : reportType;
     }
 
     public LocalDateTime getStart() {
