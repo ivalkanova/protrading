@@ -18,7 +18,7 @@ public class Account {
     private String password;
     private String salt;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<StrategyModel> strategies;
+    private Set<Strategy> strategies;
 
     public Account() {
     }

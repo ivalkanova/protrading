@@ -14,7 +14,24 @@ public class Condition {
     private Long id;
     private double assetPrice;
     private String predicate;
-    @OneToOne
-    @JoinColumn(nullable = false, referencedColumnName = "id", name = "ruleId")
-    private Rule rule;
+
+    public Condition(double assetPrice, String predicate) {
+        this.assetPrice = assetPrice;
+        this.predicate = predicate;
+    }
+
+    public boolean checkPredicate(double price) {
+        switch (predicate) {
+            case "<":
+                return price < assetPrice;
+            case "<=":
+                return price <= assetPrice;
+            case ">":
+                return price > assetPrice;
+            case ">=":
+                return price >= assetPrice;
+            default:
+                throw new IllegalStateException("Unexpected value: " + predicate);
+        }
+    }
 }
