@@ -1,5 +1,8 @@
 package com.trading.protrading.model;
 
+import com.trading.protrading.backtesting.StrategyTestObject;
+import com.trading.protrading.data.strategy.Quote;
+import com.trading.protrading.data.strategy.QuoteType;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,5 +22,28 @@ public class Rule {
     private Double takeProfit;
     @ManyToOne
     @JoinColumn(nullable = false, referencedColumnName = "id", name = "strategyId")
-    private StrategyModel strategy;
+    private Strategy strategy;
+
+    public Rule(Condition condition, Double stopLoss, Double takeProfit) {
+        this.condition = condition;
+        this.stopLoss = stopLoss;
+        this.takeProfit = takeProfit;
+    }
+
+    public void execute(Quote quote, StrategyTestObject test) {
+        QuoteType quoteType = quote.getType();
+        double currentPrice = quote.getPrice();
+
+        if (quoteType == QuoteType.SELL && test.tradeIsOpen()) {
+            double openingPrice = test.getTradeOpeningPrice();
+            double profit = currentPrice - openingPrice;
+            if (profit > takeProfit || profit < -stopLoss) {
+                test.closeTrade(currentPrice);
+            }
+        } else if (quoteType == QuoteType.BUY && !test.tradeIsOpen()) {
+            if(condition.checkPredicate(currentPrice)){
+                test.openTrade(quote, stopLoss);
+            }
+        }
+    }
 }
