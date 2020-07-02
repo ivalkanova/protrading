@@ -12,16 +12,20 @@ public class Trade {
         assetAmount = 0;
     }
 
-    public void open(double price, double amount) {
-        fundsSpend = price * amount;
-        assetAmount = amount;
+    public void open(double currentPrice, double buyFunds) {
+        fundsSpend = buyFunds;
+        assetAmount = buyFunds / currentPrice;
     }
 
-    public double close(double price) {
-        fundsReceived = assetAmount * price;
+    public double close(double currentPrice) {
+        fundsReceived = assetAmount * currentPrice;
         assetAmount = 0;
         fundsSpend = 0;
         return fundsReceived;
+    }
+
+    public double getAssetAmount() {
+        return assetAmount;
     }
 
     public double getFundsSpend() {
@@ -30,5 +34,13 @@ public class Trade {
 
     public double getFundsReceived() {
         return fundsReceived;
+    }
+
+    public double getOpeningPrice() {
+        return fundsSpend / assetAmount;
+    }
+
+    public boolean isOpen() {
+        return assetAmount != 0;
     }
 }
