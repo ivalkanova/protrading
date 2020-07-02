@@ -1,6 +1,6 @@
 package com.trading.protrading.model.report;
 
-import com.trading.protrading.model.StrategyModel;
+import com.trading.protrading.model.Strategy;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Data
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "reports")
-public class Report {
+public class ExtendedReport{
 
     @Id
     @GeneratedValue
@@ -19,9 +19,9 @@ public class Report {
     private Double profitFactor;
     @ManyToOne
     @JoinColumn(nullable = false, name = "strategyId", referencedColumnName = "id")
-    private StrategyModel strategy;
+    private Strategy strategy;
+    private Double maxDrawdown;
+    private Double returnToDrawdown;
+    private Integer maxConsecutiveLosses;
 
-    public Long getId() {
-        return id;
-    }
 }
