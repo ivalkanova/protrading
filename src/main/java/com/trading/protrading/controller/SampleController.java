@@ -1,7 +1,7 @@
 package com.trading.protrading.controller;
 
 import com.trading.protrading.model.Account;
-import com.trading.protrading.model.report.ExtendedReport;
+import com.trading.protrading.model.report.Report;
 import com.trading.protrading.repository.AccountRepository;
 import com.trading.protrading.repository.ReportRepository;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,11 +13,11 @@ import java.util.List;
 public class SampleController {
 
     private AccountRepository accountRepository;
-    private ReportRepository<ExtendedReport> extendedReportReportRepository;
+    private ReportRepository reportRepository;
 
-    public SampleController(AccountRepository accountRepository, ReportRepository<ExtendedReport> extendedReportReportRepository) {
+    public SampleController(AccountRepository accountRepository, ReportRepository reportRepository) {
         this.accountRepository = accountRepository;
-        this.extendedReportReportRepository = extendedReportReportRepository;
+        this.reportRepository = reportRepository;
     }
 
     @GetMapping("/accounts")
@@ -27,8 +27,8 @@ public class SampleController {
     }
 
     @GetMapping("/reports")
-    List<ExtendedReport> reports() {
-        List<ExtendedReport> reports = this.extendedReportReportRepository.findAll();
+    List<Report> reports() {
+        List<Report> reports = this.reportRepository.findAll();
         return reports;
     }
 

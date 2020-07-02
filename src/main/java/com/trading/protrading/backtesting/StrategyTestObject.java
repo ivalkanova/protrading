@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-public class StrategyTest {
+public class StrategyTestObject {
     private TestIdentifier identifier;
     private Strategy strategy;
     private LocalDateTime start;
@@ -21,7 +21,7 @@ public class StrategyTest {
     private double transactionBuyFunds;
     private double lockedFunds;
 
-    public StrategyTest(TestConfiguration configuration, Strategy strategy, UUID reportId) {
+    public StrategyTestObject(TestConfiguration configuration, Strategy strategy, UUID reportId) {
         this.identifier = new TestIdentifier(configuration.getUsername(), configuration.getStrategyName());
         this.strategy = strategy;
         this.start = configuration.getStart();
@@ -33,7 +33,7 @@ public class StrategyTest {
         this.trade = new Trade();
     }
 
-    public StrategyTest(TestIdentifier identifier) {
+    public StrategyTestObject(TestIdentifier identifier) {
         this.identifier = identifier;
         strategy = null;
         start = null;
@@ -112,7 +112,7 @@ public class StrategyTest {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        StrategyTest that = (StrategyTest) o;
+        StrategyTestObject that = (StrategyTestObject) o;
         return Objects.equals(identifier, that.identifier);
     }
 
