@@ -8,9 +8,7 @@ import com.trading.protrading.exceptions.ReportNotFoundException;
 import com.trading.protrading.exceptions.StrategyNotFoundException;
 import com.trading.protrading.model.Strategy;
 import com.trading.protrading.model.report.Report;
-import com.trading.protrading.repository.ConditionRepository;
 import com.trading.protrading.repository.ReportRepository;
-import com.trading.protrading.repository.RuleRepository;
 import com.trading.protrading.repository.StrategyRepository;
 import org.springframework.stereotype.Service;
 
@@ -35,14 +33,14 @@ public class BacktestingService {
     public UUID enableStrategy(TestConfiguration testConfiguration)
             throws StrategyNotFoundException {
         Strategy strategy;
-        try{
-         strategy = strategyRepository.getAllByNameAndUser_UserName(testConfiguration.getStrategyName(),
-                testConfiguration.getUsername()).get(0);}
-        catch (IndexOutOfBoundsException e){
-            throw new StrategyNotFoundException("Strategy with name " + testConfiguration.getStrategyName() +" was not found.", e);
+        try {
+            strategy = strategyRepository.getAllByNameAndUser_UserName(testConfiguration.getStrategyName(),
+                    testConfiguration.getUsername()).get(0);
+        } catch (IndexOutOfBoundsException e) {
+            throw new StrategyNotFoundException("Strategy with name " + testConfiguration.getStrategyName() + " was not found.", e);
         }
         UUID reportId = UUID.randomUUID();
-        backTester.enableStrategy(strategy, testConfiguration, reportId);
+        backTester.enableStrategy(strategy, testConfiguration, reportId, reportRepository);
         return reportId;
     }
 

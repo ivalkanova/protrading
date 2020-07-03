@@ -1,6 +1,7 @@
 package com.trading.protrading.model;
 
 import com.trading.protrading.backtesting.StrategyTestObject;
+import com.trading.protrading.data.strategy.Predicate;
 import com.trading.protrading.data.strategy.Quote;
 import com.trading.protrading.data.strategy.QuoteType;
 import org.junit.Test;
@@ -8,7 +9,7 @@ import org.junit.Test;
 import static org.mockito.Mockito.*;
 
 public class RuleTest {
-    private Condition condition = new Condition(25.3, "<=");
+    private Condition condition = new Condition(25.3, Predicate.LESS_OR_EQUAL);
     private Rule rule = new Rule(condition, 10.9, 6.4);
 
     @Test

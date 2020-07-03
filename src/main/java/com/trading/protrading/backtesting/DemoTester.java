@@ -2,6 +2,7 @@ package com.trading.protrading.backtesting;
 
 import com.trading.protrading.exceptions.StrategyNotFoundException;
 import com.trading.protrading.model.Strategy;
+import com.trading.protrading.repository.ReportRepository;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -14,8 +15,8 @@ public class DemoTester {
         testingStrategies = new ArrayBlockingQueue<StrategyTestObject>(10000);
     }
 
-    public synchronized void enableStrategy(Strategy strategy, TestConfiguration configuration, UUID reportId) {
-        StrategyTestObject test = new StrategyTestObject(configuration, strategy, reportId);
+    public synchronized void enableStrategy(Strategy strategy, TestConfiguration configuration, UUID reportId, ReportRepository repository) {
+        StrategyTestObject test = new StrategyTestObject(configuration, strategy, reportId, repository);
         testingStrategies.offer(test);
     }
 

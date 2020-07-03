@@ -6,6 +6,7 @@ import com.trading.protrading.backtesting.TestConfiguration;
 import com.trading.protrading.exceptions.StrategyNotFoundException;
 import com.trading.protrading.model.Rule;
 import com.trading.protrading.model.Strategy;
+import com.trading.protrading.repository.ReportRepository;
 import com.trading.protrading.repository.StrategyRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,12 @@ import java.util.UUID;
 public class StrategyService {
 
     private StrategyRepository strategyRepository;
+    private ReportRepository reportRepository;
     private DemoTester tester;
 
-    public StrategyService(StrategyRepository repository) {
+    public StrategyService(StrategyRepository repository, ReportRepository reportRepository) {
         this.strategyRepository = repository;
+        this.reportRepository = reportRepository;
     }
 
     public void create(Strategy strategy) {
@@ -55,7 +58,7 @@ public class StrategyService {
             throw new StrategyNotFoundException("Strategy with name " + testConfiguration.getStrategyName() + " was not found.", e);
         }
         UUID reportId = UUID.randomUUID();
-        tester.enableStrategy(strategy, testConfiguration, reportId);
+        tester.enableStrategy(strategy, testConfiguration, reportId, reportRepository);
         return reportId;
     }
 

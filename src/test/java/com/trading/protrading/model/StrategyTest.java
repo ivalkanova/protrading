@@ -1,6 +1,7 @@
 package com.trading.protrading.model;
 
 import com.trading.protrading.backtesting.StrategyTestObject;
+import com.trading.protrading.data.strategy.Predicate;
 import com.trading.protrading.data.strategy.Quote;
 import com.trading.protrading.data.strategy.QuoteType;
 import org.junit.Before;
@@ -19,9 +20,9 @@ public class StrategyTest {
 
     @Before
     public void init() {
-        Condition condition1 = new Condition(25.2, "<");
-        Condition condition2 = new Condition(20, ">");
-        Condition condition3 = new Condition(24, "<=");
+        Condition condition1 = new Condition(25.2, Predicate.LESS_THAN);
+        Condition condition2 = new Condition(20, Predicate.GREATER_THAN);
+        Condition condition3 = new Condition(24, Predicate.LESS_OR_EQUAL);
 
         Rule rule1 = new Rule(condition1, 10.0, 15.0);
         Rule rule2 = new Rule(condition2, 17.0, 25.0);

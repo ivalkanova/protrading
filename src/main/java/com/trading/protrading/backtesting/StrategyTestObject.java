@@ -3,6 +3,8 @@ package com.trading.protrading.backtesting;
 import com.trading.protrading.data.strategy.Asset;
 import com.trading.protrading.data.strategy.Quote;
 import com.trading.protrading.model.Strategy;
+import com.trading.protrading.model.report.Report;
+import com.trading.protrading.repository.ReportRepository;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -20,8 +22,12 @@ public class StrategyTestObject {
     private Trade trade;
     private double transactionBuyFunds;
     private double lockedFunds;
+    ReportRepository repository;
 
-    public StrategyTestObject(TestConfiguration configuration, Strategy strategy, UUID reportId) {
+    public StrategyTestObject(TestConfiguration configuration,
+                              Strategy strategy,
+                              UUID reportId,
+                              ReportRepository repository) {
         this.identifier = new TestIdentifier(configuration.getUsername(), configuration.getStrategyName());
         this.strategy = strategy;
         this.start = configuration.getStart();
@@ -31,6 +37,9 @@ public class StrategyTestObject {
         this.rawReport = new RawReport(funds);
         this.reportId = reportId;
         this.trade = new Trade();
+        this.transactionBuyFunds = configuration.getTransactionBuyFunds();
+        this.lockedFunds = 0;
+        this.repository = repository;
     }
 
     public StrategyTestObject(TestIdentifier identifier) {
@@ -78,7 +87,13 @@ public class StrategyTestObject {
     }
 
     public void execute(Quote quote) {
-        strategy.execute(quote, this);
+        if (quote.getDate().isBefore(end)) {
+            strategy.execute(quote, this);
+        }
+        else{
+            Report finalReport = new Report(rawReport,reportId);
+            repository.save(finalReport);
+        }
     }
 
     public void openTrade(Quote quote, double stopLoss) {
