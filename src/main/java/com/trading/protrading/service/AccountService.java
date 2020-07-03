@@ -42,8 +42,16 @@ public class AccountService {
 
 
 
-    public void delete(String username, String password) {
-
+    public void delete(String username, String password) throws UserDoesntExistException, InvalidPasswordException {
+        Optional<Account> user = this.repository.findFirstByUserName(username);
+        if (user.isEmpty()) {
+            throw new UserDoesntExistException(username);
+        }
+        boolean isPasswordValid = this.validatePassword(user.get(), password);
+        if (!isPasswordValid) {
+            throw new InvalidPasswordException(username);
+        }
+        this.repository.delete(user.get());
     }
 
     public void login(String username, String password) throws UserDoesntExistException, InvalidPasswordException {
@@ -51,7 +59,10 @@ public class AccountService {
         if (user.isEmpty()) {
             throw new UserDoesntExistException(username);
         }
-        this.validatePassword(user.get(), password);
+        boolean isPasswordValid = this.validatePassword(user.get(), password);
+        if (!isPasswordValid) {
+            throw new InvalidPasswordException(username);
+        }
     }
 
     public void changePassword(String username, String oldPassword, String newPassword) throws UserDoesntExistException, InvalidPasswordException, InvalidKeySpecException {
