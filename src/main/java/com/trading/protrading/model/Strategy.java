@@ -30,10 +30,6 @@ public class Strategy {
         this.rules = rules;
     }
 
-    public Strategy() {
-
-    }
-
     public String getName() {
         return name;
     }

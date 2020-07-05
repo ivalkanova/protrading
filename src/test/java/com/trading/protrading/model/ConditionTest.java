@@ -5,6 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class ConditionTest {
+    public static final double ASSET_PRICE = 22.3;
 
 
 //    @Test(expected = IllegalStateException.class)
@@ -15,14 +16,14 @@ public class ConditionTest {
 
     @Test
     public void testCheckPredicateWithPredicateLowerThan(){
-        Condition condition = new Condition(22.3, Predicate.LESS_THAN);
+        Condition condition = new Condition(ASSET_PRICE, Predicate.LESS_THAN);
         assertTrue(condition.checkPredicate(20));
         assertFalse(condition.checkPredicate(22.3));
     }
 
     @Test
     public void testCheckPredicateWithPredicateLowerThanOrEquals(){
-        Condition condition = new Condition(22.3,Predicate.LESS_OR_EQUAL);
+        Condition condition = new Condition(ASSET_PRICE,Predicate.LESS_OR_EQUAL);
         assertTrue(condition.checkPredicate(20));
         assertTrue(condition.checkPredicate(22.3));
         assertFalse(condition.checkPredicate(22.35));
@@ -30,14 +31,14 @@ public class ConditionTest {
 
     @Test
     public void testCheckPredicateWithPredicateHigherThan(){
-        Condition condition = new Condition(22.3,Predicate.GREATER_THAN);
+        Condition condition = new Condition(ASSET_PRICE,Predicate.GREATER_THAN);
         assertTrue(condition.checkPredicate(22.4));
         assertFalse(condition.checkPredicate(20));
     }
 
     @Test
     public void testCheckPredicateWithPredicateHigherThanOrEquals(){
-        Condition condition = new Condition(22.3,Predicate.GREATER_OR_EQUAL);
+        Condition condition = new Condition(ASSET_PRICE,Predicate.GREATER_OR_EQUAL);
         assertFalse(condition.checkPredicate(20));
         assertTrue(condition.checkPredicate(22.4));
         assertTrue(condition.checkPredicate(22.4));

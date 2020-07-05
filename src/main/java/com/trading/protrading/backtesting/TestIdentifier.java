@@ -3,8 +3,8 @@ package com.trading.protrading.backtesting;
 import java.util.Objects;
 
 public class TestIdentifier {
-    String username;
-    String strategyName;
+    private String username;
+    private String strategyName;
 
     public TestIdentifier(String username, String strategyName) {
         this.username = username;

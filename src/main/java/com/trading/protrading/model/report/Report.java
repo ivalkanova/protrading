@@ -30,6 +30,10 @@ public class Report {
 
     public Report(RawReport raw, UUID reportId) {
         publicId = reportId;
+        extractRawReportData(raw);
+    }
+
+    private void extractRawReportData(RawReport raw) {
         totalReturn = raw.getCurrentFunds();
         winLossRatio = (double) raw.getWinCount() / raw.getLossesCount();
         profitFactor = raw.getGrossProfit() / raw.getGrossLosses();

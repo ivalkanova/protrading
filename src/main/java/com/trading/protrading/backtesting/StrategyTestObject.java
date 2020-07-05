@@ -86,17 +86,34 @@ public class StrategyTestObject {
         return reportId;
     }
 
+    public Trade getTrade() {
+        return trade;
+    }
+
+    public double getTransactionBuyFunds() {
+        return transactionBuyFunds;
+    }
+
+    public double getLockedFunds() {
+        return lockedFunds;
+    }
+
     public void execute(Quote quote) {
-        if (quote.getDate().isBefore(end)) {
-            strategy.execute(quote, this);
-        }
-        else{
-            Report finalReport = new Report(rawReport,reportId);
-            repository.save(finalReport);
+        if (asset.equals(quote.getAsset())) {
+            if (quote.getDate().isBefore(end)) {
+                strategy.execute(quote, this);
+            } else {
+                if (trade.isOpen()) {
+                    closeTrade(quote.getPrice());
+                }
+                Report finalReport = new Report(rawReport, reportId);
+                repository.save(finalReport);
+            }
         }
     }
 
-    public void openTrade(Quote quote, double stopLoss) {
+    public void openTrade(Quote quote, double stopLossForOneAsset) {
+        double stopLoss = stopLossForOneAsset * (transactionBuyFunds / quote.getPrice());
         if (funds < stopLoss) {
             return;
         } else {
