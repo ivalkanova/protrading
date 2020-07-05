@@ -24,20 +24,20 @@ public class QuoteGeneratorTest {
 
     @Mock
     private NumberGenerator numberGenerator;
-    private static Map<Asset, Double> currentPrices = new HashMap<>();
+    private final static Map<Asset, Double> LATEST_PRICES = new HashMap<>();
 
     @BeforeAll
     public static void setUp() {
-        currentPrices.put(Asset.PETROL, 42.66);
-        currentPrices.put(Asset.GOLD, 50.89);
-        currentPrices.put(Asset.SILVER, 0.53);
+        LATEST_PRICES.put(Asset.PETROL, 42.66);
+        LATEST_PRICES.put(Asset.GOLD, 50.89);
+        LATEST_PRICES.put(Asset.SILVER, 0.53);
     }
 
     @Test
     public void generateQuoteWithTransactionTypeSell() {
         final int silverIndex = 1;
         final int typeSell = 1;
-        final double silverLastPrice = 0.53;
+        final double silverLatestPrice = 0.53;
 
         when(numberGenerator.generateInt(anyInt(), anyInt()))
                 .thenReturn(silverIndex)
@@ -45,13 +45,13 @@ public class QuoteGeneratorTest {
                 .thenAnswer(returnsSecondArg());
         when(numberGenerator.generateDouble(anyDouble(), anyDouble())).thenAnswer(returnsSecondArg());
 
-        currentPrices.put(Asset.SILVER, silverLastPrice);
-        QuoteGenerator generator = new QuoteGenerator(currentPrices, numberGenerator);
+        LATEST_PRICES.put(Asset.SILVER, silverLatestPrice);
+        QuoteGenerator generator = new QuoteGenerator(LATEST_PRICES, numberGenerator);
         Quote quote = generator.generateQuote();
 
         assertEquals(Asset.SILVER, quote.getAsset());
         assertEquals(TransactionType.SELL, quote.getType());
-        assertTrue(quote.getPrice() <= silverLastPrice,
+        assertTrue(quote.getPrice() <= silverLatestPrice,
                 "Price should stay the same or decrease on SELL");
     }
 
@@ -59,7 +59,7 @@ public class QuoteGeneratorTest {
     public void generateQuoteWithTransactionTypeBuy() {
         final int silverIndex = 1;
         final int typeBuy = 0;
-        final double silverLastPrice = 0.53;
+        final double silverLastestPrice = 0.53;
 
         when(numberGenerator.generateInt(anyInt(), anyInt()))
                 .thenReturn(silverIndex)
@@ -67,13 +67,13 @@ public class QuoteGeneratorTest {
                 .thenAnswer(returnsSecondArg());
         when(numberGenerator.generateDouble(anyDouble(), anyDouble())).thenAnswer(returnsSecondArg());
 
-        currentPrices.put(Asset.SILVER, silverLastPrice);
-        QuoteGenerator generator = new QuoteGenerator(currentPrices, numberGenerator);
+        LATEST_PRICES.put(Asset.SILVER, silverLastestPrice);
+        QuoteGenerator generator = new QuoteGenerator(LATEST_PRICES, numberGenerator);
         Quote quote = generator.generateQuote();
 
         assertEquals(Asset.SILVER, quote.getAsset());
         assertEquals(TransactionType.BUY, quote.getType());
-        assertTrue(quote.getPrice() >= silverLastPrice,
+        assertTrue(quote.getPrice() >= silverLastestPrice,
                 "Price should stay the same or increase on BUY");
 
     }
@@ -83,7 +83,7 @@ public class QuoteGeneratorTest {
         when(numberGenerator.generateInt(anyInt(), anyInt())).thenAnswer(returnsSecondArg());
         when(numberGenerator.generateDouble(anyDouble(), anyDouble())).thenAnswer(returnsSecondArg());
 
-        QuoteGenerator generator = new QuoteGenerator(currentPrices, numberGenerator);
+        QuoteGenerator generator = new QuoteGenerator(LATEST_PRICES, numberGenerator);
         Quote quote = generator.generateQuote();
 
         assertTrue(quote.getPrice() > 0, "Quote price should be positive");

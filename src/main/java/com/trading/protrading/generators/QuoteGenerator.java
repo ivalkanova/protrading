@@ -13,19 +13,19 @@ public class QuoteGenerator {
     private final static double AVERAGE_SILVER_PRICE = 0.53;
     private final static double AVERAGE_GOLD_PRICE = 50.89;
     private final static double AVERAGE_PETROL_PRICE = 42.66;
-    private final Map<Asset, Double> lastPrices;
+    private final Map<Asset, Double> latestPrices;
     private final NumberGenerator numberGenerator;
 
     public QuoteGenerator() {
-        lastPrices = new EnumMap<>(Asset.class);
-        lastPrices.put(Asset.PETROL, AVERAGE_PETROL_PRICE);
-        lastPrices.put(Asset.GOLD, AVERAGE_GOLD_PRICE);
-        lastPrices.put(Asset.SILVER, AVERAGE_SILVER_PRICE);
+        latestPrices = new EnumMap<>(Asset.class);
+        latestPrices.put(Asset.PETROL, AVERAGE_PETROL_PRICE);
+        latestPrices.put(Asset.GOLD, AVERAGE_GOLD_PRICE);
+        latestPrices.put(Asset.SILVER, AVERAGE_SILVER_PRICE);
         numberGenerator = new NumberGenerator();
     }
 
-    QuoteGenerator(Map<Asset, Double> lastPrices, NumberGenerator numberGenerator) {
-        this.lastPrices = lastPrices;
+    QuoteGenerator(Map<Asset, Double> latestPrices, NumberGenerator numberGenerator) {
+        this.latestPrices = latestPrices;
         this.numberGenerator = numberGenerator;
     }
 
@@ -38,19 +38,19 @@ public class QuoteGenerator {
         TransactionType type = TransactionType.values()[typeIndex];
 
         double price = generatePrice(asset, type);
-        lastPrices.put(asset, price);
+        latestPrices.put(asset, price);
 
         return new Quote(asset, price, type, LocalDateTime.now());
     }
 
     private double generatePrice(Asset asset, TransactionType type) {
-        double lastPrice = lastPrices.get(asset);
-        double variation = generateVariation(type, lastPrice);
+        double latestPrice = latestPrices.get(asset);
+        double variation = generateVariation(type, latestPrice);
         double price;
         if (type.equals(TransactionType.BUY)) {
-            price = numberGenerator.generateDouble(lastPrice, variation + lastPrice);
+            price = numberGenerator.generateDouble(latestPrice, variation + latestPrice);
         } else {
-            price = numberGenerator.generateDouble(lastPrice - variation, lastPrice);
+            price = numberGenerator.generateDouble(latestPrice - variation, latestPrice);
         }
         return round(price);
     }
