@@ -4,9 +4,18 @@ import com.trading.protrading.data.strategy.Quote;
 
 public class Market {
 
+    private DataSupplier dataSupplier;
 
-    public Quote getQuote(){
-        return null;
+    public Market() {
+        this(new DataSupplier());
+    }
+
+    Market(DataSupplier dataSupplier) {
+        this.dataSupplier = dataSupplier;
+    }
+
+    public Quote getQuote() {
+        return dataSupplier.getLatestQuote();
     }
 
 }
