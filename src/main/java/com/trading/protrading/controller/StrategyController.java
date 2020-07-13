@@ -82,13 +82,26 @@ public class StrategyController {
     public StrategyDTO getStrategy(@PathVariable String name, HttpServletRequest request, HttpServletResponse response) {
         String username = this.getUsernameFromHeader(request);
         if (username == null) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
         try {
             return this.strategyService.getOne(username, name);
         } catch (StrategyNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return null;
+        }
+    }
+
+    @DeleteMapping("/strategies/{name}")
+    public void deleteStrategy(@PathVariable String name, HttpServletRequest request, HttpServletResponse response) {
+        String username = this.getUsernameFromHeader(request);
+        if (username == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        try {
+            this.strategyService.delete(username, name);
+        } catch (StrategyNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
