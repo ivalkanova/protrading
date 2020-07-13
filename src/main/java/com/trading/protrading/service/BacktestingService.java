@@ -1,6 +1,6 @@
 package com.trading.protrading.service;
 
-import com.trading.protrading.backtesting.BackTester;
+import com.trading.protrading.backtesting.PastDataStrategyTestingTasksStorage;
 import com.trading.protrading.backtesting.TestConfiguration;
 import com.trading.protrading.data.strategy.ComparisonReport;
 import com.trading.protrading.exceptions.IncompatibleReportTypesException;
@@ -20,14 +20,14 @@ import java.util.UUID;
 public class BacktestingService {
     private ReportRepository reportRepository;
     private StrategyRepository strategyRepository;
-    private BackTester backTester;
+    private PastDataStrategyTestingTasksStorage pastDataStrategyTestingTasksStorage;
 
 
     public BacktestingService(ReportRepository reportRepository,
                               StrategyRepository strategyRepository) {
         this.reportRepository = reportRepository;
         this.strategyRepository = strategyRepository;
-        this.backTester = new BackTester();
+        this.pastDataStrategyTestingTasksStorage = new PastDataStrategyTestingTasksStorage();
     }
 
     public UUID enableStrategy(TestConfiguration testConfiguration)
@@ -40,7 +40,7 @@ public class BacktestingService {
             throw new StrategyNotFoundException("Strategy with name " + testConfiguration.getStrategyName() + " was not found.", e);
         }
         UUID reportId = UUID.randomUUID();
-        backTester.enableStrategy(strategy, testConfiguration, reportId, reportRepository);
+        pastDataStrategyTestingTasksStorage.enableStrategy(strategy, testConfiguration, reportId, reportRepository);
         return reportId;
     }
 

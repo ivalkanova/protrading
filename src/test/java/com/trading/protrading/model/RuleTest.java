@@ -1,6 +1,6 @@
 package com.trading.protrading.model;
 
-import com.trading.protrading.backtesting.StrategyTestObject;
+import com.trading.protrading.backtesting.StrategyTestTask;
 import com.trading.protrading.data.strategy.Predicate;
 import com.trading.protrading.data.strategy.Quote;
 import com.trading.protrading.data.strategy.QuoteType;
@@ -15,7 +15,7 @@ public class RuleTest {
 
     @Test
     public void testExecuteWhenTradeIsNotOpenAndPriceIsNotSatisfactory() {
-        StrategyTestObject strategyTest = mock(StrategyTestObject.class);
+        StrategyTestTask strategyTest = mock(StrategyTestTask.class);
         when(strategyTest.tradeIsOpen()).thenReturn(false);
         Quote quote = new Quote(null, 28, QuoteType.BUY, null);
         rule.execute(quote,strategyTest);
@@ -24,7 +24,7 @@ public class RuleTest {
 
     @Test
     public void testExecuteWhenTradeIsOpenAndPriceIsNotSatisfactory() {
-        StrategyTestObject strategyTest = mock(StrategyTestObject.class);
+        StrategyTestTask strategyTest = mock(StrategyTestTask.class);
         when(strategyTest.tradeIsOpen()).thenReturn(true);
         when(strategyTest.getTradeOpeningPrice()).thenReturn(OPPENING_PRICE);
         Quote quote = new Quote(null, 28, QuoteType.SELL, null);
@@ -34,7 +34,7 @@ public class RuleTest {
 
     @Test
     public void testExecuteWhenTradeIsNotOpenAndPriceIsSatisfactory() {
-        StrategyTestObject strategyTest = mock(StrategyTestObject.class);
+        StrategyTestTask strategyTest = mock(StrategyTestTask.class);
         when(strategyTest.tradeIsOpen()).thenReturn(false);
         Quote quote = new Quote(null, 20.2, QuoteType.BUY, null);
         rule.execute(quote,strategyTest);
@@ -43,7 +43,7 @@ public class RuleTest {
 
     @Test
     public void testExecuteWhenTradeIsOpenAndPriceIsExceedingStopLossBoundary() {
-        StrategyTestObject strategyTest = mock(StrategyTestObject.class);
+        StrategyTestTask strategyTest = mock(StrategyTestTask.class);
         when(strategyTest.tradeIsOpen()).thenReturn(true);
         when(strategyTest.getTradeOpeningPrice()).thenReturn(OPPENING_PRICE);
         Quote quote = new Quote(null, 13.5, QuoteType.SELL, null);
@@ -53,7 +53,7 @@ public class RuleTest {
 
     @Test
     public void testExecuteWhenTradeIsOpenAndPriceIsExceedingTakeProfitBoundary() {
-        StrategyTestObject strategyTest = mock(StrategyTestObject.class);
+        StrategyTestTask strategyTest = mock(StrategyTestTask.class);
         when(strategyTest.tradeIsOpen()).thenReturn(true);
         when(strategyTest.getTradeOpeningPrice()).thenReturn(OPPENING_PRICE);
         Quote quote = new Quote(null, 40, QuoteType.SELL, null);

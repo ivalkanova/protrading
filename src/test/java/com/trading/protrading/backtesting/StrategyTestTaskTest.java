@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class StrategyTestObjectTest {
+public class StrategyTestTaskTest {
     public static final int STARTING_FUNDS = 1000;
     public static final double DELTA = 0.01;
     public static final int CLOSING_PRICE = 35;
@@ -29,7 +29,7 @@ public class StrategyTestObjectTest {
 
     @Test
     public void testGetIdentifier() {
-        StrategyTestObject testObject = new StrategyTestObject(configuration, null, null, null);
+        StrategyTestTask testObject = new StrategyTestTask(configuration, null, null, null);
         TestIdentifier id = new TestIdentifier("User1", "GoldStrategy");
         assertEquals(id, testObject.getIdentifier());
 
@@ -37,31 +37,19 @@ public class StrategyTestObjectTest {
         assertNotEquals(falseId, testObject.getIdentifier());
     }
 
-    @Test
-    public void testExecuteWithIncorrectAsset() {
-        ReportRepository repository = mock(ReportRepository.class);
-        Strategy strategy = mock(Strategy.class);
-        StrategyTestObject testObject = new StrategyTestObject(configuration, strategy, null, repository);
-
-        Quote quote = new Quote(Asset.PETROL, 12.3, QuoteType.BUY, LocalDateTime.now());
-
-        testObject.execute(quote);
-        verify(repository, never()).save(any(Report.class));
-        verify(strategy, never()).execute(any(Quote.class), any(StrategyTestObject.class));
-    }
 
     @Test
     public void testExecuteWithIncorrectQuoteEndTimeAndOpenTrade() {
         ReportRepository repository = mock(ReportRepository.class);
         Strategy strategy = mock(Strategy.class);
-        StrategyTestObject testObject = new StrategyTestObject(configuration, strategy, null, repository);
+        StrategyTestTask testObject = new StrategyTestTask(configuration, strategy, null, repository);
 
         testObject.openTrade(new Quote(null, 52, null, null), 12);
         assertTrue(testObject.tradeIsOpen());
 
         testObject.execute(quote);
         verify(repository, times(1)).save(any(Report.class));
-        verify(strategy, never()).execute(any(Quote.class), any(StrategyTestObject.class));
+        verify(strategy, never()).execute(any(Quote.class), any(StrategyTestTask.class));
         assertFalse(testObject.tradeIsOpen());
     }
 
@@ -69,11 +57,11 @@ public class StrategyTestObjectTest {
     public void testExecuteWithIncorrectQuoteEndTimeAndClosedTrade() {
         ReportRepository repository = mock(ReportRepository.class);
         Strategy strategy = mock(Strategy.class);
-        StrategyTestObject testObject = new StrategyTestObject(configuration, strategy, null, repository);
+        StrategyTestTask testObject = new StrategyTestTask(configuration, strategy, null, repository);
 
         testObject.execute(quote);
         verify(repository, times(1)).save(any(Report.class));
-        verify(strategy, never()).execute(any(Quote.class), any(StrategyTestObject.class));
+        verify(strategy, never()).execute(any(Quote.class), any(StrategyTestTask.class));
         assertFalse(testObject.tradeIsOpen());
     }
 
@@ -81,7 +69,7 @@ public class StrategyTestObjectTest {
     public void testExecuteWithCorrectQuoteEndTime() {
         ReportRepository repository = mock(ReportRepository.class);
         Strategy strategy = mock(Strategy.class);
-        StrategyTestObject testObject = new StrategyTestObject(configuration, strategy, null, repository);
+        StrategyTestTask testObject = new StrategyTestTask(configuration, strategy, null, repository);
         Quote quote = new Quote(Asset.GOLD, 12.3, QuoteType.BUY, LocalDateTime.now());
         testObject.execute(quote);
         verify(repository, never()).save(any(Report.class));
@@ -90,7 +78,7 @@ public class StrategyTestObjectTest {
 
     @Test
     public void testOpenTradeWithNotEnoughFunds() {
-        StrategyTestObject testObject = new StrategyTestObject(configuration, null, null, null);
+        StrategyTestTask testObject = new StrategyTestTask(configuration, null, null, null);
         assertEquals(0, testObject.getLockedFunds(), DELTA);
         testObject.openTrade(quote, STARTING_FUNDS + 200);
         assertEquals(0, testObject.getLockedFunds(), DELTA);
@@ -98,7 +86,7 @@ public class StrategyTestObjectTest {
 
     @Test
     public void testOpenTradeWithEnoughFundsLocksFunds() {
-        StrategyTestObject testObject = new StrategyTestObject(configuration, null, null, null);
+        StrategyTestTask testObject = new StrategyTestTask(configuration, null, null, null);
         assertEquals(0, testObject.getLockedFunds(), DELTA);
         testObject.openTrade(quote, STOP_LOSS);
         assertEquals(243.9, testObject.getLockedFunds(), DELTA);
@@ -106,14 +94,14 @@ public class StrategyTestObjectTest {
 
     @Test
     public void testOpenTradeWithEnoughFundsModifiesFunds() {
-        StrategyTestObject testObject = new StrategyTestObject(configuration, null, null, null);
+        StrategyTestTask testObject = new StrategyTestTask(configuration, null, null, null);
         testObject.openTrade(quote, STOP_LOSS);
         assertEquals(606.1, testObject.getFunds(), DELTA);
     }
 
     @Test
     public void testOpenTradeWithEnoughFundsOpensTrade() {
-        StrategyTestObject testObject = new StrategyTestObject(configuration, null, null, null);
+        StrategyTestTask testObject = new StrategyTestTask(configuration, null, null, null);
         assertFalse(testObject.tradeIsOpen());
         testObject.openTrade(quote, STOP_LOSS);
         assertTrue(testObject.tradeIsOpen());
@@ -121,7 +109,7 @@ public class StrategyTestObjectTest {
 
     @Test
     public void testOpenTradeWithEnoughFundsModifiesRawReport() {
-        StrategyTestObject testObject = new StrategyTestObject(configuration, null, null, null);
+        StrategyTestTask testObject = new StrategyTestTask(configuration, null, null, null);
         assertEquals(STARTING_FUNDS, testObject.getRawReport().getCurrentFunds(), DELTA);
         testObject.openTrade(quote, STOP_LOSS);
         assertEquals(850, testObject.getRawReport().getCurrentFunds(), DELTA);
@@ -129,7 +117,7 @@ public class StrategyTestObjectTest {
 
     @Test
     public void testCloseTradeUpdatesFunds() {
-        StrategyTestObject testObject = new StrategyTestObject(configuration, null, null, null);
+        StrategyTestTask testObject = new StrategyTestTask(configuration, null, null, null);
         assertEquals(STARTING_FUNDS, testObject.getFunds(), DELTA);
         testObject.openTrade(quote, STOP_LOSS);
         testObject.closeTrade(CLOSING_PRICE);
@@ -138,7 +126,7 @@ public class StrategyTestObjectTest {
 
     @Test
     public void testCloseTradeClearsLockedFunds() {
-        StrategyTestObject testObject = new StrategyTestObject(configuration, null, null, null);
+        StrategyTestTask testObject = new StrategyTestTask(configuration, null, null, null);
         testObject.openTrade(quote, STOP_LOSS);
         testObject.closeTrade(CLOSING_PRICE);
         assertEquals(0, testObject.getLockedFunds(), DELTA);
@@ -146,7 +134,7 @@ public class StrategyTestObjectTest {
 
     @Test
     public void testCloseTradeClosesTrade() {
-        StrategyTestObject testObject = new StrategyTestObject(configuration, null, null, null);
+        StrategyTestTask testObject = new StrategyTestTask(configuration, null, null, null);
         assertFalse(testObject.tradeIsOpen());
         testObject.openTrade(quote, STOP_LOSS);
         assertTrue(testObject.tradeIsOpen());
@@ -156,10 +144,18 @@ public class StrategyTestObjectTest {
 
     @Test
     public void testCloseTradeUpdatesRawReport() {
-        StrategyTestObject testObject = new StrategyTestObject(configuration, null, null, null);
+        StrategyTestTask testObject = new StrategyTestTask(configuration, null, null, null);
         assertEquals(STARTING_FUNDS, testObject.getRawReport().getCurrentFunds(), DELTA);
         testObject.openTrade(quote, STOP_LOSS);
         testObject.closeTrade(CLOSING_PRICE);
         assertEquals(1276.83, testObject.getRawReport().getCurrentFunds(), DELTA);
+    }
+
+
+    @Test
+    public void testEquals() {
+        StrategyTestTask testObject = new StrategyTestTask(configuration, null, null, null);
+        StrategyTestTask testObject2 = new StrategyTestTask(new TestIdentifier("User1", "GoldStrategy"));
+        assertEquals(testObject, testObject2);
     }
 }

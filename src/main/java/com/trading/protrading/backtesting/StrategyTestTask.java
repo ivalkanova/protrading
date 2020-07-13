@@ -10,48 +10,42 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-public class StrategyTestObject {
-    private TestIdentifier identifier;
-    private Strategy strategy;
-    private LocalDateTime start;
-    private LocalDateTime end;
+public class StrategyTestTask {
+    private final TestIdentifier identifier;
+    private final Strategy strategy;
+    private TestConfiguration configuration;
     private double funds;
-    private Asset asset;
-    private RawReport rawReport;
+    private final RawReport rawReport;
     private final UUID reportId;
-    private Trade trade;
-    private double transactionBuyFunds;
+    private final Trade trade;
     private double lockedFunds;
-    ReportRepository repository;
+    private ReportRepository repository;
+    private boolean finished;
+    private Quote lastOpenQuote;
 
-    public StrategyTestObject(TestConfiguration configuration,
-                              Strategy strategy,
-                              UUID reportId,
-                              ReportRepository repository) {
+    public StrategyTestTask(TestConfiguration configuration,
+                            Strategy strategy,
+                            UUID reportId,
+                            ReportRepository repository) {
         this.identifier = new TestIdentifier(configuration.getUsername(), configuration.getStrategyName());
         this.strategy = strategy;
-        this.start = configuration.getStart();
-        this.end = configuration.getEnd();
+        this.configuration = configuration;
         this.funds = configuration.getFunds();
-        this.asset = configuration.getAsset();
-        this.rawReport = new RawReport(funds);
+        this.rawReport = new RawReport(configuration.getFunds());
         this.reportId = reportId;
         this.trade = new Trade();
-        this.transactionBuyFunds = configuration.getTransactionBuyFunds();
         this.lockedFunds = 0;
         this.repository = repository;
+        this.finished = false;
     }
 
-    public StrategyTestObject(TestIdentifier identifier) {
+    public StrategyTestTask(TestIdentifier identifier) {
         this.identifier = identifier;
         strategy = null;
-        start = null;
-        end = null;
-        funds = 0;
-        asset = null;
         rawReport = null;
         reportId = null;
         trade = null;
+        this.finished = false;
     }
 
     public TestIdentifier getIdentifier() {
@@ -63,11 +57,11 @@ public class StrategyTestObject {
     }
 
     public LocalDateTime getStart() {
-        return start;
+        return configuration.getStart();
     }
 
     public LocalDateTime getEnd() {
-        return end;
+        return configuration.getEnd();
     }
 
     public double getFunds() {
@@ -75,7 +69,7 @@ public class StrategyTestObject {
     }
 
     public Asset getAsset() {
-        return asset;
+        return configuration.getAsset();
     }
 
     public RawReport getRawReport() {
@@ -91,38 +85,56 @@ public class StrategyTestObject {
     }
 
     public double getTransactionBuyFunds() {
-        return transactionBuyFunds;
+        return configuration.getTransactionBuyFunds();
     }
 
     public double getLockedFunds() {
         return lockedFunds;
     }
 
+    public boolean isFinished() {
+        return finished;
+    }
+
     public void execute(Quote quote) {
-        if (asset.equals(quote.getAsset())) {
-            if (quote.getDate().isBefore(end)) {
-                strategy.execute(quote, this);
-            } else {
-                if (trade.isOpen()) {
-                    closeTrade(quote.getPrice());
-                }
-                Report finalReport = new Report(rawReport, reportId);
-                repository.save(finalReport);
-            }
+        if (quote.getDate().isBefore(configuration.getEnd())) {
+            strategy.execute(quote, this);
+        } else {
+            finalizeTestingObject(quote);
         }
     }
 
+    private void finalizeTestingObject(Quote quote) {
+        if (trade.isOpen()) {
+            closeTrade(lastOpenQuote.getPrice());
+        }
+        saveReport();
+        finished = true;
+    }
+
+    private void saveReport() {
+        Report finalReport = new Report(rawReport, reportId);
+        repository.save(finalReport);
+    }
+
     public void openTrade(Quote quote, double stopLossForOneAsset) {
+        double transactionBuyFunds = configuration.getTransactionBuyFunds();
         double stopLoss = stopLossForOneAsset * (transactionBuyFunds / quote.getPrice());
+
         if (funds < stopLoss) {
             return;
         } else {
             double buyFunds = Math.min(transactionBuyFunds, funds - stopLoss);
-            funds -= buyFunds + stopLoss;
-            lockedFunds = stopLoss;
+            updateFunds(stopLoss, buyFunds);
             trade.open(quote.getPrice(), buyFunds);
             rawReport.openPosition(buyFunds);
+            lastOpenQuote = quote;
         }
+    }
+
+    private void updateFunds(double stopLoss, double buyFunds) {
+        funds -= buyFunds + stopLoss;
+        lockedFunds = stopLoss;
     }
 
     public void closeTrade(double price) {
@@ -144,7 +156,7 @@ public class StrategyTestObject {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        StrategyTestObject that = (StrategyTestObject) o;
+        StrategyTestTask that = (StrategyTestTask) o;
         return Objects.equals(identifier, that.identifier);
     }
 

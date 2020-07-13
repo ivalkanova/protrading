@@ -1,7 +1,7 @@
 package com.trading.protrading.service;
 
 
-import com.trading.protrading.backtesting.DemoTester;
+import com.trading.protrading.backtesting.RealTimeStrategyTestingTasksStorage;
 import com.trading.protrading.backtesting.TestConfiguration;
 import com.trading.protrading.exceptions.StrategyNotFoundException;
 import com.trading.protrading.model.Rule;
@@ -18,7 +18,7 @@ public class StrategyService {
 
     private StrategyRepository strategyRepository;
     private ReportRepository reportRepository;
-    private DemoTester tester;
+    private RealTimeStrategyTestingTasksStorage tester;
 
     public StrategyService(StrategyRepository repository, ReportRepository reportRepository) {
         this.strategyRepository = repository;

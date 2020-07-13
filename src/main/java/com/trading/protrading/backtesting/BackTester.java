@@ -1,20 +1,50 @@
 package com.trading.protrading.backtesting;
 
-import com.trading.protrading.model.Strategy;
-import com.trading.protrading.repository.ReportRepository;
+import com.trading.protrading.data.strategy.Quote;
+import com.trading.protrading.exceptions.InvalidPeriodException;
+import testdata.MarketHistory;
 
-import java.util.UUID;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.LinkedList;
 
-public class BackTester {
-    private ArrayBlockingQueue<StrategyTestObject> pastDataTestingStrategies;
+public class BackTester extends Thread {
+    private final PastDataStrategyTestingTasksStorage pastDataStrategyTestingTasksStorage;
+    private final MarketHistory marketHistory;
+    private LinkedList<Quote> quotes;
 
-    public synchronized void enableStrategy(Strategy strategy, TestConfiguration configuration, UUID reportId, ReportRepository repository) {
-        StrategyTestObject test = new StrategyTestObject(configuration, strategy, reportId, repository);
-        pastDataTestingStrategies.offer(test);
+    public BackTester(PastDataStrategyTestingTasksStorage pastDataStrategyTestingTasksStorage, MarketHistory marketHistory) {
+        this.pastDataStrategyTestingTasksStorage = pastDataStrategyTestingTasksStorage;
+        this.marketHistory = marketHistory;
+        this.quotes = null;
     }
 
-    public synchronized StrategyTestObject getNextStrategyTest() throws InterruptedException {
-        return pastDataTestingStrategies.take();
+    @Override
+    public void run() {
+        StrategyTestTask currentTask = pastDataStrategyTestingTasksStorage.getNextStrategyTest();
+        while (currentTask != null) {
+            executeTaskOverQuotes(currentTask);
+
+            finalizeTask(currentTask, quotes);
+            currentTask = pastDataStrategyTestingTasksStorage.getNextStrategyTest();
+        }
+    }
+
+
+    private void executeTaskOverQuotes(StrategyTestTask task) {
+        try {
+            quotes = new LinkedList<>(marketHistory.getQuotes(task.getStart(), task.getEnd(), task.getAsset()));
+        } catch (InvalidPeriodException e) {
+            e.printStackTrace();
+        }
+
+        for (Quote quote : quotes) {
+            task.execute(quote);
+        }
+    }
+
+    private void finalizeTask(StrategyTestTask task, LinkedList<Quote> quotes) {
+        Quote quote = quotes.getLast();
+        Quote closingQuote = new Quote(quote.getAsset(), 0, null, quote.getDate().plusMinutes(1));
+        task.execute(closingQuote);
     }
 }
+
