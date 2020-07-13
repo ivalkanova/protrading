@@ -70,7 +70,7 @@ public class StrategyService {
     }
 
     public void delete(String userName, String strategyName) throws StrategyNotFoundException {
-        Optional<Strategy> strategy = this.strategyRepository.getFirstByNameAndUser_UserName(userName, strategyName);
+        Optional<Strategy> strategy = this.strategyRepository.getFirstByNameAndUser_UserName(strategyName, userName);
         if (strategy.isEmpty()) {
             throw new StrategyNotFoundException("Can not delete strategy " + strategyName + " as it doesn't exist for user " + userName);
         }
