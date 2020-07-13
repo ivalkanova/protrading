@@ -4,6 +4,7 @@ import com.trading.protrading.data.strategy.Asset;
 import com.trading.protrading.data.strategy.Quote;
 import com.trading.protrading.exceptions.InvalidPeriodException;
 import com.trading.protrading.generators.QuoteGenerator;
+import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Path;
 import java.time.LocalDate;
@@ -16,16 +17,21 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static org.apache.logging.log4j.LogManager.getLogger;
+
 public class DataSupplier {
 
+    private final static Logger LOGGER = getLogger(DataSupplier.class);
     private final Map<Asset, Archive> archives;
     private final QuoteGenerator generator;
     private Quote latestQuote;
     private ScheduledExecutorService updateSheduler;
 
     public DataSupplier() {
-        this(new EnumMap<>(Asset.class), new QuoteGenerator());
+        this.archives = new EnumMap<>(Asset.class);
+        this.generator = new QuoteGenerator();
         configureArchives();
+        configureLatestQuoteUpdate();
     }
 
     DataSupplier(Map<Asset, Archive> archives, QuoteGenerator generator) {
@@ -54,6 +60,11 @@ public class DataSupplier {
     }
 
     public synchronized Quote getLatestQuote() {
+        try {
+            wait();
+        } catch (InterruptedException e) {
+            LOGGER.debug(e.getMessage());
+        }
         return latestQuote;
     }
 
@@ -61,10 +72,10 @@ public class DataSupplier {
         Quote quote = generator.generateQuote();
         synchronized (this) {
             latestQuote = quote;
+            notifyAll();
         }
         Archive archive = archives.get(quote.getAsset());
         archive.addLatestQuote(quote);
-
     }
 
     public List<Quote> getOldQuotes(LocalDateTime start, LocalDateTime end, Asset asset)
