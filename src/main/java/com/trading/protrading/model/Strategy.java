@@ -1,6 +1,6 @@
 package com.trading.protrading.model;
 
-import com.trading.protrading.backtesting.StrategyTestTask;
+import com.trading.protrading.strategytesting.StrategyTestTask;
 import com.trading.protrading.data.strategy.Quote;
 import com.trading.protrading.model.report.Report;
 import lombok.Data;

@@ -1,7 +1,9 @@
-package com.trading.protrading.backtesting;
+package com.trading.protrading.demotesting;
 
 import com.trading.protrading.data.strategy.Asset;
 import com.trading.protrading.data.strategy.Quote;
+import com.trading.protrading.strategytesting.StrategyTestTask;
+import com.trading.protrading.strategytesting.TestIdentifier;
 import testdata.Market;
 
 public class DemoTester extends Thread {

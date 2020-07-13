@@ -1,8 +1,8 @@
 package com.trading.protrading.service;
 
 
-import com.trading.protrading.backtesting.RealTimeStrategyTestingTasksStorage;
-import com.trading.protrading.backtesting.TestConfiguration;
+import com.trading.protrading.demotesting.RealTimeStrategyTestingTasksStorage;
+import com.trading.protrading.strategytesting.TestConfiguration;
 import com.trading.protrading.exceptions.StrategyNotFoundException;
 import com.trading.protrading.model.Rule;
 import com.trading.protrading.model.Strategy;

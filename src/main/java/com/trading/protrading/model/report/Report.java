@@ -1,6 +1,6 @@
 package com.trading.protrading.model.report;
 
-import com.trading.protrading.backtesting.RawReport;
+import com.trading.protrading.strategytesting.RawReport;
 import com.trading.protrading.model.Strategy;
 import lombok.Data;
 

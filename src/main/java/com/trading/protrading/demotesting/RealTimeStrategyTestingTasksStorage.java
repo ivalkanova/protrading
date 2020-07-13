@@ -1,8 +1,11 @@
-package com.trading.protrading.backtesting;
+package com.trading.protrading.demotesting;
 
 import com.trading.protrading.exceptions.StrategyNotFoundException;
 import com.trading.protrading.model.Strategy;
 import com.trading.protrading.repository.ReportRepository;
+import com.trading.protrading.strategytesting.StrategyTestTask;
+import com.trading.protrading.strategytesting.TestConfiguration;
+import com.trading.protrading.strategytesting.TestIdentifier;
 
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;

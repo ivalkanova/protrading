@@ -2,6 +2,7 @@ package com.trading.protrading.backtesting;
 
 import com.trading.protrading.data.strategy.Quote;
 import com.trading.protrading.exceptions.InvalidPeriodException;
+import com.trading.protrading.strategytesting.StrategyTestTask;
 import testdata.MarketHistory;
 
 import java.util.LinkedList;

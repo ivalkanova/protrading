@@ -1,4 +1,4 @@
-package com.trading.protrading.backtesting;
+package com.trading.protrading.strategytesting;
 
 public class RawReport {
    /* Return -  The total return of the strategy since it started running.

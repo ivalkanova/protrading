@@ -1,4 +1,4 @@
-package com.trading.protrading.backtesting;
+package com.trading.protrading.strategytesting;
 
 public class Trade {
     private double fundsSpend;

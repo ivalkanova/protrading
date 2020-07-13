@@ -1,7 +1,7 @@
 package com.trading.protrading.service;
 
 import com.trading.protrading.backtesting.PastDataStrategyTestingTasksStorage;
-import com.trading.protrading.backtesting.TestConfiguration;
+import com.trading.protrading.strategytesting.TestConfiguration;
 import com.trading.protrading.data.strategy.ComparisonReport;
 import com.trading.protrading.exceptions.IncompatibleReportTypesException;
 import com.trading.protrading.exceptions.ReportNotFoundException;

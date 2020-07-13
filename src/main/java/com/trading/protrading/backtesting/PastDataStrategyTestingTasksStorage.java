@@ -2,6 +2,8 @@ package com.trading.protrading.backtesting;
 
 import com.trading.protrading.model.Strategy;
 import com.trading.protrading.repository.ReportRepository;
+import com.trading.protrading.strategytesting.StrategyTestTask;
+import com.trading.protrading.strategytesting.TestConfiguration;
 
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;

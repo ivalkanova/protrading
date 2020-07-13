@@ -1,4 +1,4 @@
-package com.trading.protrading.backtesting;
+package com.trading.protrading.strategytesting;
 
 import org.junit.Test;
 
