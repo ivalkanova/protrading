@@ -2,7 +2,7 @@ package com.trading.protrading.generators;
 
 import com.trading.protrading.data.strategy.Asset;
 import com.trading.protrading.data.strategy.Quote;
-import com.trading.protrading.data.strategy.TransactionType;
+import com.trading.protrading.data.strategy.QuoteType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,7 +50,7 @@ public class QuoteGeneratorTest {
         Quote quote = generator.generateQuote();
 
         assertEquals(Asset.SILVER, quote.getAsset());
-        assertEquals(TransactionType.SELL, quote.getType());
+        assertEquals(QuoteType.SELL, quote.getType());
         assertTrue(quote.getPrice() <= silverLatestPrice,
                 "Price should stay the same or decrease on SELL");
     }
@@ -72,7 +72,7 @@ public class QuoteGeneratorTest {
         Quote quote = generator.generateQuote();
 
         assertEquals(Asset.SILVER, quote.getAsset());
-        assertEquals(TransactionType.BUY, quote.getType());
+        assertEquals(QuoteType.BUY, quote.getType());
         assertTrue(quote.getPrice() >= silverLastestPrice,
                 "Price should stay the same or increase on BUY");
 

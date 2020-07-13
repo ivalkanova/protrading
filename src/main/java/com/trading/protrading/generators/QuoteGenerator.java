@@ -2,7 +2,7 @@ package com.trading.protrading.generators;
 
 import com.trading.protrading.data.strategy.Asset;
 import com.trading.protrading.data.strategy.Quote;
-import com.trading.protrading.data.strategy.TransactionType;
+import com.trading.protrading.data.strategy.QuoteType;
 
 import java.time.LocalDateTime;
 import java.util.EnumMap;
@@ -34,8 +34,8 @@ public class QuoteGenerator {
         int assetIndex = numberGenerator.generateInt(0, Asset.values().length - 1);
         Asset asset = Asset.values()[assetIndex];
 
-        int typeIndex = numberGenerator.generateInt(0, TransactionType.values().length - 1);
-        TransactionType type = TransactionType.values()[typeIndex];
+        int typeIndex = numberGenerator.generateInt(0, QuoteType.values().length - 1);
+        QuoteType type = QuoteType.values()[typeIndex];
 
         double price = generatePrice(asset, type);
         latestPrices.put(asset, price);
@@ -43,11 +43,11 @@ public class QuoteGenerator {
         return new Quote(asset, price, type, LocalDateTime.now());
     }
 
-    private double generatePrice(Asset asset, TransactionType type) {
+    private double generatePrice(Asset asset, QuoteType type) {
         double latestPrice = latestPrices.get(asset);
         double variation = generateVariation(type, latestPrice);
         double price;
-        if (type.equals(TransactionType.BUY)) {
+        if (type.equals(QuoteType.BUY)) {
             price = numberGenerator.generateDouble(latestPrice, variation + latestPrice);
         } else {
             price = numberGenerator.generateDouble(latestPrice - variation, latestPrice);
@@ -55,9 +55,9 @@ public class QuoteGenerator {
         return round(price);
     }
 
-    private double generateVariation(TransactionType type, double lastPrice) {
+    private double generateVariation(QuoteType type, double lastPrice) {
         double maximumVariation = 20;
-        if (lastPrice <= maximumVariation && type.equals(TransactionType.SELL)) {
+        if (lastPrice <= maximumVariation && type.equals(QuoteType.SELL)) {
             maximumVariation = lastPrice - 1;
         }
         return numberGenerator.generateDouble(0, maximumVariation);

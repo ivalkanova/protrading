@@ -2,7 +2,8 @@ package com.trading.protrading.marketdata;
 
 import com.trading.protrading.data.strategy.Asset;
 import com.trading.protrading.data.strategy.Quote;
-import com.trading.protrading.data.strategy.TransactionType;
+import com.trading.protrading.data.strategy.QuoteType;
+
 import com.trading.protrading.exceptions.InvalidPeriodException;
 import com.trading.protrading.generators.QuoteGenerator;
 import org.junit.jupiter.api.BeforeAll;
@@ -36,10 +37,10 @@ public class DataSupplierTest {
         LocalDateTime startDate = LocalDateTime.of(2020, 6, 3, 3, 30, 30);
         LocalDateTime endDate = startDate.plusDays(3);
         goldQuotes = new ArrayList<>();
-        goldQuotes.add(new Quote(Asset.GOLD, 20, TransactionType.BUY, startDate));
-        goldQuotes.add(new Quote(Asset.GOLD, 20, TransactionType.BUY, endDate));
-        goldQuotes.add(new Quote(Asset.GOLD, 20, TransactionType.BUY, endDate));
-        goldQuotes.add(new Quote(Asset.GOLD, 20, TransactionType.BUY, endDate.plusMinutes(3)));
+        goldQuotes.add(new Quote(Asset.GOLD, 20, QuoteType.BUY, startDate));
+        goldQuotes.add(new Quote(Asset.GOLD, 20, QuoteType.BUY, endDate));
+        goldQuotes.add(new Quote(Asset.GOLD, 20, QuoteType.BUY, endDate));
+        goldQuotes.add(new Quote(Asset.GOLD, 20, QuoteType.BUY, endDate.plusMinutes(3)));
 
     }
 
