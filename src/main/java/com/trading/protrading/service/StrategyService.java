@@ -1,7 +1,9 @@
 package com.trading.protrading.service;
 
 
+import com.trading.protrading.data.strategy.Predicate;
 import com.trading.protrading.demotesting.RealTimeStrategyTestingTasksStorage;
+import com.trading.protrading.dto.ConditionDTO;
 import com.trading.protrading.dto.RuleDTO;
 import com.trading.protrading.dto.StrategyDTO;
 import com.trading.protrading.model.Account;
@@ -85,9 +87,20 @@ public class StrategyService {
         return strategy.get();
     }
 
-    public List<Strategy> getAll(String userName) {
-        return this.strategyRepository.getAllByUser_UserName(userName);
+    public List<StrategyDTO> getAll(String userName) {
+        List<Strategy> allStrategies = this.strategyRepository.getAllByUser_UserName(userName);
+        return allStrategies.stream().map(this::mapToDto).collect(Collectors.toList());
     }
+
+    public StrategyDTO getOne(String userName, String strategyName) throws StrategyNotFoundException {
+        Optional<Strategy> strategy = this.strategyRepository.getFirstByNameAndUser_UserName(strategyName, userName);
+        if (strategy.isEmpty()) {
+            throw new StrategyNotFoundException("Strategy with name " + strategyName + "for user" + userName + "not found and couldn't be updated");
+        }
+
+        return this.mapToDto(strategy.get());
+    }
+
 
     public void changeName(String userName, String oldName, String newName) throws StrategyNotFoundException {
         Optional<Strategy> strategy = this.strategyRepository.getFirstByNameAndUser_UserName(userName, oldName);
@@ -152,5 +165,47 @@ public class StrategyService {
 
         r.setCondition(c);
         return r;
+    }
+
+
+    private StrategyDTO mapToDto(Strategy strategy) {
+        StrategyDTO mappedObject = new StrategyDTO();
+        mappedObject.setName(strategy.getName());
+        mappedObject.setRules(strategy.getRules().stream().map(this::mapToDto).collect(Collectors.toSet()));
+        return mappedObject;
+    }
+
+
+    private RuleDTO mapToDto(Rule rule) {
+        RuleDTO mappedObject = new RuleDTO();
+        mappedObject.setStopLoss(rule.getStopLoss());
+        mappedObject.setTakeProfit(rule.getTakeProfit());
+        mappedObject.setCondition(this.mapToDto(rule.getCondition()));
+        return mappedObject;
+    }
+
+    private ConditionDTO mapToDto(Condition condition) {
+        ConditionDTO mappedObject = new ConditionDTO();
+        mappedObject.setAssetPrice(condition.getAssetPrice());
+        Predicate p = condition.getPredicate();
+        String conditionPredicate = null;
+        if (p == Predicate.LESS_OR_EQUAL) {
+            conditionPredicate = "<=";
+        }
+        if (p == Predicate.LESS_THAN) {
+            conditionPredicate = "<";
+        }
+        if (p == Predicate.GREATER_OR_EQUAL) {
+            conditionPredicate = ">=";
+        }
+        if (p == Predicate.GREATER_THAN) {
+            conditionPredicate = ">";
+        }
+        if (conditionPredicate == null) {
+            throw new IllegalStateException("Enum wasn't from the possible values.");
+        }
+        mappedObject.setPredicate(conditionPredicate);
+
+        return mappedObject;
     }
 }

@@ -2,12 +2,14 @@ package com.trading.protrading.controller;
 
 import com.trading.protrading.dto.StrategyDTO;
 import com.trading.protrading.exceptions.StrategyNotFoundException;
+import com.trading.protrading.model.Strategy;
 import com.trading.protrading.service.BacktestingService;
 import com.trading.protrading.service.StrategyService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RestController
 public class StrategyController {
@@ -63,6 +65,30 @@ public class StrategyController {
             this.strategyService.changeRules(username, name, strategy.getRules());
         } catch (StrategyNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/strategies/all")
+    public List<StrategyDTO> getAllStrategies(HttpServletRequest request, HttpServletResponse response) {
+        String username = this.getUsernameFromHeader(request);
+        if (username == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
+        return this.strategyService.getAll(username);
+    }
+
+    @GetMapping("/strategies/single/{name}")
+    public StrategyDTO getStrategy(@PathVariable String name, HttpServletRequest request, HttpServletResponse response) {
+        String username = this.getUsernameFromHeader(request);
+        if (username == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        }
+        try {
+            return this.strategyService.getOne(username, name);
+        } catch (StrategyNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return null;
         }
     }
 

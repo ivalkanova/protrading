@@ -1,5 +1,6 @@
 package com.trading.protrading.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.trading.protrading.data.strategy.Predicate;
 import com.trading.protrading.model.Condition;
 import lombok.Data;
@@ -9,7 +10,7 @@ public class ConditionDTO {
     private Double assetPrice;
     private String predicate;
 
-
+    @JsonIgnore
     public Predicate getPredicateEnum() {
         if (this.predicate.compareTo(">=") == 0) {
             return Predicate.GREATER_OR_EQUAL;
