@@ -1,6 +1,6 @@
 package com.trading.protrading.model;
 
-import com.trading.protrading.backtesting.StrategyTestObject;
+import com.trading.protrading.backtesting.StrategyTestTask;
 import com.trading.protrading.data.strategy.Predicate;
 import com.trading.protrading.data.strategy.Quote;
 import com.trading.protrading.data.strategy.QuoteType;
@@ -36,7 +36,7 @@ public class StrategyTest {
 
     @Test
     public void testExecuteWithPriceSatisfactoryForAllRules() {
-        StrategyTestObject strategyTest = mock(StrategyTestObject.class);
+        StrategyTestTask strategyTest = mock(StrategyTestTask.class);
         when(strategyTest.tradeIsOpen()).thenReturn(true);
         when(strategyTest.getTradeOpeningPrice()).thenReturn(25.7);
 
@@ -49,7 +49,7 @@ public class StrategyTest {
 
     @Test
     public void testExecuteWithPriceNotSatisfactoryForAnyRule() {
-        StrategyTestObject strategyTest = mock(StrategyTestObject.class);
+        StrategyTestTask strategyTest = mock(StrategyTestTask.class);
         when(strategyTest.tradeIsOpen()).thenReturn(true);
         when(strategyTest.getTradeOpeningPrice()).thenReturn(25.7);
 
@@ -62,7 +62,7 @@ public class StrategyTest {
 
     @Test
     public void testExecuteWithPriceSatisfactoryForSomeRules() {
-        StrategyTestObject strategyTest = mock(StrategyTestObject.class);
+        StrategyTestTask strategyTest = mock(StrategyTestTask.class);
         when(strategyTest.tradeIsOpen()).thenReturn(false);
 
         Quote quote = new Quote(null, 24.8, QuoteType.BUY, null);

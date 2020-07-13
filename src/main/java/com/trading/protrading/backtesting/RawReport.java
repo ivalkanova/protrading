@@ -54,15 +54,23 @@ public class RawReport {
         double grossOutcome = outcome - lockedFunds;
         lockedFunds = 0;
         if (grossOutcome >= 0) {
-            grossProfit += grossOutcome;
-            winCount++;
-            currentConsecutiveLossesCount = 0;
+            updateGrossProfit(grossOutcome);
         } else {
-            grossLosses -= grossOutcome;
-            lossesCount++;
-            currentConsecutiveLossesCount++;
-            maxConsecutiveLossesCount = Math.max(maxConsecutiveLossesCount, currentConsecutiveLossesCount);
+            updateGrossLosses(grossOutcome);
         }
+    }
+
+    private void updateGrossProfit(double grossOutcome) {
+        grossProfit += grossOutcome;
+        winCount++;
+        currentConsecutiveLossesCount = 0;
+    }
+
+    private void updateGrossLosses(double grossOutcome) {
+        grossLosses -= grossOutcome;
+        lossesCount++;
+        currentConsecutiveLossesCount++;
+        maxConsecutiveLossesCount = Math.max(maxConsecutiveLossesCount, currentConsecutiveLossesCount);
     }
 
     private void updateFunds(double outcome) {

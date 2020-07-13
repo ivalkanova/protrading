@@ -1,6 +1,6 @@
 package com.trading.protrading.model;
 
-import com.trading.protrading.backtesting.StrategyTestObject;
+import com.trading.protrading.backtesting.StrategyTestTask;
 import com.trading.protrading.data.strategy.Quote;
 import com.trading.protrading.data.strategy.QuoteType;
 import lombok.Data;
@@ -30,7 +30,7 @@ public class Rule {
         this.takeProfit = takeProfit;
     }
 
-    public void execute(Quote quote, StrategyTestObject test) {
+    public void execute(Quote quote, StrategyTestTask test) {
         QuoteType quoteType = quote.getType();
         double currentPrice = quote.getPrice();
 

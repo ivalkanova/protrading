@@ -1,6 +1,6 @@
 package com.trading.protrading.model;
 
-import com.trading.protrading.backtesting.StrategyTestObject;
+import com.trading.protrading.backtesting.StrategyTestTask;
 import com.trading.protrading.data.strategy.Quote;
 import com.trading.protrading.model.report.Report;
 import lombok.Data;
@@ -34,7 +34,7 @@ public class Strategy {
         return name;
     }
 
-    public void execute(Quote quote, StrategyTestObject test){
+    public void execute(Quote quote, StrategyTestTask test){
         for(Rule rule : rules){
             rule.execute(quote, test);
         }
