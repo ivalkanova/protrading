@@ -6,6 +6,7 @@ import com.trading.protrading.model.report.Report;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -25,6 +26,8 @@ public class Strategy {
     @OneToMany(mappedBy = "strategy", targetEntity = Rule.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Rule> rules;
 
+    public Strategy() {}
+
     public Strategy(String name, Set<Rule> rules) {
         this.name = name;
         this.rules = rules;
@@ -38,5 +41,30 @@ public class Strategy {
         for(Rule rule : rules){
             rule.execute(quote, test);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Strategy strategy = (Strategy) o;
+        return Objects.equals(id, strategy.id) &&
+                Objects.equals(name, strategy.name) &&
+                Objects.equals(rules, strategy.rules);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, rules);
+    }
+
+    @Override
+    public String toString() {
+        return "Strategy{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", user=" + user +
+                ", rules=" + rules +
+                '}';
     }
 }

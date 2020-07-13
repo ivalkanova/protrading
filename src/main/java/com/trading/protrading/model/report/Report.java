@@ -16,10 +16,10 @@ public class Report {
     @Id
     @GeneratedValue
     private Long id;
-    @Column(name = "uuid", columnDefinition = "BINARY(16)")
     @ManyToOne
     @JoinColumn(nullable = false, name = "strategyId", referencedColumnName = "id")
     private Strategy strategy;
+    @Column(name = "uuid", columnDefinition = "BINARY(16)")
     private UUID publicId;
     private Double totalReturn;
     private Double winLossRatio;
