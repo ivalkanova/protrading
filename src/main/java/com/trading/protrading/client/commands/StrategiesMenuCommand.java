@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.net.http.HttpClient;
 
 public class StrategiesMenuCommand extends Command {
+
     public StrategiesMenuCommand(HttpClient httpClient, PrintWriter writer, BufferedReader reader, ClientInMemoryStorage storage) {
         super(httpClient, writer, reader, storage);
     }
@@ -25,7 +26,8 @@ public class StrategiesMenuCommand extends Command {
             case "back":
                 return;
             case "create-strategy":
-
+                new CreateStrategyCommand(httpClient, writer, reader, storage).run(url);
+                break;
             case "modify-strategy":
             case "show-strategies":
                 new ShowStrategiesCommand(httpClient, writer, reader, storage).run(url);
