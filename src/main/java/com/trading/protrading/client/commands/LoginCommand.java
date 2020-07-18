@@ -5,7 +5,6 @@ import com.trading.protrading.client.ClientInMemoryStorage;
 import org.springframework.http.HttpStatus;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
@@ -59,9 +58,7 @@ public class LoginCommand extends Command {
                 this.writer.printf("Server returned error code %d", response.statusCode());
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
