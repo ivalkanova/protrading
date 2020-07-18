@@ -100,11 +100,11 @@ public class StrategyTestTask {
         if (quote.getDate().isBefore(configuration.getEnd())) {
             strategy.execute(quote, this);
         } else {
-            finalizeTestingObject(quote);
+            finalizeTestingObject();
         }
     }
 
-    private void finalizeTestingObject(Quote quote) {
+    private void finalizeTestingObject() {
         if (trade.isOpen()) {
             closeTrade(lastOpenQuote.getPrice());
         }
@@ -114,6 +114,7 @@ public class StrategyTestTask {
 
     private void saveReport() {
         Report finalReport = new Report(rawReport, reportId);
+        finalReport.setStrategy(this.strategy);
         repository.save(finalReport);
     }
 

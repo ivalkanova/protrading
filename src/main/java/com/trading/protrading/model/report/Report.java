@@ -35,8 +35,8 @@ public class Report {
 
     private void extractRawReportData(RawReport raw) {
         totalReturn = raw.getCurrentFunds();
-        winLossRatio = (double) raw.getWinCount() / raw.getLossesCount();
-        profitFactor = raw.getGrossProfit() / raw.getGrossLosses();
+        winLossRatio = raw.getLossesCount() == 0 ? (double) raw.getWinCount() : (double) raw.getWinCount() / raw.getLossesCount();
+        profitFactor = raw.getGrossLosses() == 0 ? raw.getGrossProfit() : raw.getGrossProfit() / raw.getGrossLosses();
         maxDrawdown = raw.getMaxDrawdown();
         returnToDrawdown = raw.getDrawdownReturn();
         maxConsecutiveLosses = raw.getMaxConsecutiveLossesCount();

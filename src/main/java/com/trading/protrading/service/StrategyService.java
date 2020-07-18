@@ -2,10 +2,13 @@ package com.trading.protrading.service;
 
 
 import com.trading.protrading.data.strategy.Predicate;
+import com.trading.protrading.demotesting.DemoTester;
 import com.trading.protrading.demotesting.RealTimeStrategyTestingTasksStorage;
 import com.trading.protrading.dto.ConditionDTO;
 import com.trading.protrading.dto.RuleDTO;
 import com.trading.protrading.dto.StrategyDTO;
+import com.trading.protrading.exceptions.StrategyAlreadyRunningException;
+import com.trading.protrading.marketdata.Market;
 import com.trading.protrading.model.Account;
 import com.trading.protrading.model.Condition;
 import com.trading.protrading.repository.*;
@@ -31,7 +34,7 @@ public class StrategyService {
     private RuleRepository ruleRepository;
 
 
-    private RealTimeStrategyTestingTasksStorage tester;
+    private RealTimeStrategyTestingTasksStorage storage;
 
     public StrategyService(AccountRepository accountRepository, StrategyRepository strategyRepository, ReportRepository reportRepository, ConditionRepository conditionRepository, RuleRepository ruleRepository) {
         this.accountRepository = accountRepository;
@@ -39,6 +42,9 @@ public class StrategyService {
         this.reportRepository = reportRepository;
         this.conditionRepository = conditionRepository;
         this.ruleRepository = ruleRepository;
+        this.storage = new RealTimeStrategyTestingTasksStorage();
+        DemoTester tester = new DemoTester(new Market(), this.storage);
+        tester.start();
     }
 
     public void create(StrategyDTO strategy, String username) {
@@ -69,12 +75,15 @@ public class StrategyService {
         this.strategyRepository.save(databaseStrategyModel);
     }
 
-    public void delete(String userName, String strategyName) throws StrategyNotFoundException {
+    public void delete(String userName, String strategyName) throws StrategyNotFoundException, StrategyAlreadyRunningException {
         Optional<Strategy> strategy = this.strategyRepository.getFirstByNameAndUser_UserName(strategyName, userName);
         if (strategy.isEmpty()) {
             throw new StrategyNotFoundException("Can not delete strategy " + strategyName + " as it doesn't exist for user " + userName);
         }
-
+        // TODO this.storage;
+        if (this.storage.isRunning(userName, strategyName)) {
+            throw new StrategyAlreadyRunningException(strategyName);
+        }
         this.strategyRepository.delete(strategy.get());
     }
 
@@ -146,12 +155,12 @@ public class StrategyService {
             throw new StrategyNotFoundException("Strategy with name " + testConfiguration.getStrategyName() + " was not found.", e);
         }
         UUID reportId = UUID.randomUUID();
-        tester.enableStrategy(strategy, testConfiguration, reportId, reportRepository);
+        storage.enableStrategy(strategy, testConfiguration, reportId, reportRepository);
         return reportId;
     }
 
     public void disableStrategy(String username, String strategy) throws StrategyNotFoundException {
-        tester.disableStrategy(username, strategy);
+        storage.disableStrategy(username, strategy);
     }
 
 

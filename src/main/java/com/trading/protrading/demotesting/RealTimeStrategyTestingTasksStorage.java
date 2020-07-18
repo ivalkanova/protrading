@@ -10,7 +10,12 @@ import com.trading.protrading.strategytesting.TestIdentifier;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import org.apache.logging.log4j.Logger;
+
+import static org.apache.logging.log4j.LogManager.getLogger;
+
 public class RealTimeStrategyTestingTasksStorage {
+    private final static Logger LOGGER = getLogger(RealTimeStrategyTestingTasksStorage.class);
     private static final int CAPACITY = 1000;
     private ArrayBlockingQueue<StrategyTestTask> testingStrategies;
     private StrategyTestTask delimiter;
@@ -31,7 +36,7 @@ public class RealTimeStrategyTestingTasksStorage {
         try {
             currentTest = testingStrategies.take();
         } catch (InterruptedException e) {
-            //TODO What should I do here???
+            LOGGER.debug(e.getMessage());
         }
 
         //skip working on and remove already finished tasks
@@ -39,7 +44,7 @@ public class RealTimeStrategyTestingTasksStorage {
             try {
                 currentTest = testingStrategies.take();
             } catch (InterruptedException e) {
-                //TODO What should I do here???
+                LOGGER.debug(e.getMessage());
             }
         }
 
@@ -61,5 +66,16 @@ public class RealTimeStrategyTestingTasksStorage {
             throw new StrategyNotFoundException(
                     "There isn't enabled strategy with the specified name. Please check for typos.");
         }
+    }
+
+    public synchronized boolean isRunning(String username, String strategy) {
+        TestIdentifier testIdentifier = new TestIdentifier(username, strategy);
+        StrategyTestTask task = new StrategyTestTask(testIdentifier);
+        for (StrategyTestTask runningTask : testingStrategies) {
+            if (task.equals(runningTask)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
