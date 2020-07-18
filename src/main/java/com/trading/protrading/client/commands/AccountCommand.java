@@ -17,6 +17,7 @@ public class AccountCommand extends Command {
     public AccountCommand(HttpClient httpClient, PrintWriter writer, BufferedReader reader,
                           ClientInMemoryStorage storage) {
         super(httpClient, writer, reader, storage);
+        commands = new HashMap<>();
         configureCommands(httpClient, writer, reader, storage);
     }
 
@@ -50,6 +51,7 @@ public class AccountCommand extends Command {
     }
 
     private void runCommand(int option, String url) throws IOException {
-        commands.get(option).run(url);
+       Command command= commands.get(option);
+       command.run(url);
     }
 }

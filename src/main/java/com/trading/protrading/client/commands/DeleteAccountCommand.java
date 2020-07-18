@@ -17,7 +17,7 @@ import static org.apache.logging.log4j.LogManager.getLogger;
 
 public class DeleteAccountCommand extends Command {
 
-    private final static String DELETE_ACCOUNT_PATH = "/accounts/delete";
+    private final static String DELETE_ACCOUNT_PATH = "/accounts";
     private final static Logger LOGGER = getLogger(ChangePasswordCommand.class);
     private String password;
     private String username;

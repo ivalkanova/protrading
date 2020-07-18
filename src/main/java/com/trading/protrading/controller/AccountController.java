@@ -8,6 +8,8 @@ import com.trading.protrading.exceptions.UserDoesntExistException;
 import com.trading.protrading.service.AccountService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.security.spec.InvalidKeySpecException;
 
 @RestController
@@ -36,6 +38,24 @@ public class AccountController {
             return false;
         }
         return true;
+    }
+
+    @DeleteMapping("/accounts")
+    public boolean delete(@RequestBody AccountCredentials credentials, HttpServletRequest request, HttpServletResponse response) {
+        String username = StrategyController.getUsernameFromHeader(request);
+        if (username == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return false;
+        }
+        try {
+            this.accountService.delete(username, credentials.getPassword());
+            return true;
+        } catch (UserDoesntExistException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        } catch (InvalidPasswordException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        return false;
     }
 
     @PostMapping("/accounts/login")
