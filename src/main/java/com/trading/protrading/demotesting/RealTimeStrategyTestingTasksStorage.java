@@ -11,11 +11,14 @@ import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 
 public class RealTimeStrategyTestingTasksStorage {
-    public static final int CAPACITY = 1000;
+    private static final int CAPACITY = 1000;
     private ArrayBlockingQueue<StrategyTestTask> testingStrategies;
+    private StrategyTestTask delimiter;
 
     public RealTimeStrategyTestingTasksStorage() {
         testingStrategies = new ArrayBlockingQueue<StrategyTestTask>(CAPACITY);
+        TestIdentifier identifier = new TestIdentifier("delimiter", "delimiter");
+        delimiter = new StrategyTestTask(identifier);
     }
 
     public synchronized void enableStrategy(Strategy strategy, TestConfiguration configuration, UUID reportId, ReportRepository repository) {
@@ -31,6 +34,7 @@ public class RealTimeStrategyTestingTasksStorage {
             //TODO What should I do here???
         }
 
+        //skip working on and remove already finished tasks
         while (currentTest.isFinished()) {
             try {
                 currentTest = testingStrategies.take();
@@ -39,13 +43,14 @@ public class RealTimeStrategyTestingTasksStorage {
             }
         }
 
-        testingStrategies.offer(currentTest);
+        if (!currentTest.equals(delimiter)) {
+            testingStrategies.offer(currentTest);
+        }
+
         return currentTest;
     }
 
     public synchronized void putDelimiter() {
-        TestIdentifier identifier = new TestIdentifier("delimiter", "delimiter");
-        StrategyTestTask delimiter = new StrategyTestTask(identifier);
         testingStrategies.offer(delimiter);
     }
 
