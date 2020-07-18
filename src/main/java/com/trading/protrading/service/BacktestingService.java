@@ -1,6 +1,8 @@
 package com.trading.protrading.service;
 
+import com.trading.protrading.backtesting.BackTester;
 import com.trading.protrading.backtesting.PastDataStrategyTestingTasksStorage;
+import com.trading.protrading.marketdata.MarketHistory;
 import com.trading.protrading.strategytesting.TestConfiguration;
 import com.trading.protrading.data.strategy.ComparisonReport;
 import com.trading.protrading.exceptions.IncompatibleReportTypesException;
@@ -20,14 +22,16 @@ import java.util.UUID;
 public class BacktestingService {
     private ReportRepository reportRepository;
     private StrategyRepository strategyRepository;
-    private PastDataStrategyTestingTasksStorage pastDataStrategyTestingTasksStorage;
+    private PastDataStrategyTestingTasksStorage storage;
 
 
     public BacktestingService(ReportRepository reportRepository,
                               StrategyRepository strategyRepository) {
         this.reportRepository = reportRepository;
         this.strategyRepository = strategyRepository;
-        this.pastDataStrategyTestingTasksStorage = new PastDataStrategyTestingTasksStorage();
+        this.storage = new PastDataStrategyTestingTasksStorage();
+        BackTester tester = new BackTester(this.storage, new MarketHistory());
+        tester.start();
     }
 
     public UUID enableStrategy(TestConfiguration testConfiguration)
@@ -40,25 +44,25 @@ public class BacktestingService {
             throw new StrategyNotFoundException("Strategy with name " + testConfiguration.getStrategyName() + " was not found.", e);
         }
         UUID reportId = UUID.randomUUID();
-        pastDataStrategyTestingTasksStorage.enableStrategy(strategy, testConfiguration, reportId, reportRepository);
+        storage.enableStrategy(strategy, testConfiguration, reportId, reportRepository);
         return reportId;
     }
 
-    public ComparisonReport compareStrategies(String username, String firstStrategy, String secondStrategy)
-            throws StrategyNotFoundException {
-        return null;
-    }
+   // public ComparisonReport compareStrategies(String username, String firstStrategy, String secondStrategy)
+   //         throws StrategyNotFoundException {
+   //     return null;
+   // }
 
     public Collection<Report> getReports(String username, String strategy, int countOfReports)
             throws StrategyNotFoundException {
         return null;
     }
 
-    public Report getReport(String username, BigInteger reportId) throws ReportNotFoundException {
+    public Report getReport(UUID reportId) throws ReportNotFoundException {
         return null;
     }
 
-    public ComparisonReport compareReports(String username, BigInteger firstReportId, BigInteger secondReportId)
+    public ComparisonReport compareReports(UUID firstReportId, UUID secondReportId)
             throws IncompatibleReportTypesException, ReportNotFoundException {
         return null;
     }

@@ -4,16 +4,20 @@ import com.trading.protrading.model.Strategy;
 import com.trading.protrading.repository.ReportRepository;
 import com.trading.protrading.strategytesting.StrategyTestTask;
 import com.trading.protrading.strategytesting.TestConfiguration;
+import org.apache.logging.log4j.Logger;
 
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import static org.apache.logging.log4j.LogManager.getLogger;
+
 public class PastDataStrategyTestingTasksStorage {
     public static final int CAPACITY = 1000;
-    private ArrayBlockingQueue<StrategyTestTask> pastDataTestingStrategies;
+    private static final Logger LOGGER = getLogger(PastDataStrategyTestingTasksStorage.class);
+    private final ArrayBlockingQueue<StrategyTestTask> pastDataTestingStrategies;
 
     public PastDataStrategyTestingTasksStorage() {
-        pastDataTestingStrategies=new ArrayBlockingQueue<StrategyTestTask>(CAPACITY);
+        pastDataTestingStrategies = new ArrayBlockingQueue<>(CAPACITY);
     }
 
     public synchronized void enableStrategy(Strategy strategy,
@@ -29,7 +33,7 @@ public class PastDataStrategyTestingTasksStorage {
         try {
            testObject = pastDataTestingStrategies.take();
         } catch (InterruptedException e) {
-            //TODO What should I do???
+            LOGGER.debug(e.getMessage());
         }
         return testObject;
     }
