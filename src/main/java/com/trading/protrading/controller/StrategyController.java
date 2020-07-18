@@ -131,7 +131,7 @@ public class StrategyController {
             return this.strategyService.enableStrategy(testConfiguration);
 
         } catch (InvalidAssetException | StrategyNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
 
