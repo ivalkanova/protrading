@@ -8,5 +8,4 @@ import java.util.Set;
 public class StrategyDTO {
     private String name;
     private Set<RuleDTO> rules;
-
 }

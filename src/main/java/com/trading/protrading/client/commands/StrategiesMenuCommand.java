@@ -17,6 +17,7 @@ public class StrategiesMenuCommand extends Command {
         writer.println("Available commands:");
         writer.println("Create-strategy");
         writer.println("Modify-strategy");
+        writer.println("Run-strategy");
         writer.println("Delete-strategies");
         writer.println("Please choose a menu or type \"Back\" to go to the previous menu. ");
 
@@ -27,6 +28,9 @@ public class StrategiesMenuCommand extends Command {
             case "create-strategy":
 
             case "modify-strategy":
+            case "run-strategy":
+                new RunStrategyCommand(httpClient, writer, reader, storage, false).run(url);
+                break;
             case "show-strategies":
                 new ShowStrategiesCommand(httpClient, writer, reader, storage).run(url);
                 break;

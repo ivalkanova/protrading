@@ -25,7 +25,7 @@ public class TestingMenuCommand extends Command {
             case "back":
                 return;
             case "run-strategy":
-
+                    new RunStrategyCommand(httpClient, writer, reader, storage, true).run(url);
             case "disable-strategy":
                     new DisableStrategyCommand(httpClient, writer, reader, storage).run(url);
                 break;

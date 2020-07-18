@@ -30,6 +30,7 @@ public class MainMenuCommand extends Command {
                 case "account":
 
                 case "strategies":
+                    new StrategiesMenuCommand(httpClient, writer, reader, storage).run(url);
                 case "reports":
                 case "testing":
                     new TestingMenuCommand(httpClient, writer, reader, storage).run(url);
