@@ -12,7 +12,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class RegisterCommand extends Command {
-    private static final String USER_REGISTER_PATH = "/account/create";
+    private static final String USER_REGISTER_PATH = "/accounts/create";
 
     public RegisterCommand(HttpClient httpClient, PrintWriter writer, BufferedReader reader, ClientInMemoryStorage storage) {
         super(httpClient, writer, reader, storage);
