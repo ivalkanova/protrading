@@ -15,6 +15,7 @@ public class MainMenuCommand extends Command {
     @Override
     public void run(String url) throws IOException {
         while(true) {
+            writer.printf("Welcome, %s%n", this.storage.getLoggedUser());
             writer.println("Available menus:");
             writer.println("Account");
             writer.println("Strategies");
@@ -23,13 +24,15 @@ public class MainMenuCommand extends Command {
             writer.println("Please choose a menu or type \"Back\" to go to the previous menu. ");
 
             String line = reader.readLine();
-            switch (line.toLowerCase()) {
+            switch (line.toLowerCase().trim()) {
                 case "back":
                     return;
                 case "account":
+
                 case "strategies":
                 case "reports":
                 case "testing":
+                    new TestingMenuCommand(httpClient, writer, reader, storage).run(url);
             }
         }
     }

@@ -22,7 +22,6 @@ public class LoginCommand extends Command {
 
     @Override
     public void run(String url) throws IOException {
-
         this.writer.printf("Please enter your username: ");
         String username = this.reader.readLine();
 
