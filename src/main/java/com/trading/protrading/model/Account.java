@@ -16,15 +16,16 @@ public class Account {
     private Long id;
     @Column(unique = true)
     private String userName;
-    private String password;
-    private String salt;
+    private byte[] password;
+    @Column(name = "salt", columnDefinition = "BINARY(16)")
+    private byte[] salt;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Strategy> strategies;
 
     public Account() {
     }
 
-    public Account(String userName, String password, String salt) {
+    public Account(String userName, byte[] password, byte[] salt) {
         this.userName = userName;
         this.password = password;
         this.salt = salt;
