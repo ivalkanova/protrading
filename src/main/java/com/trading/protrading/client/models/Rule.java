@@ -5,6 +5,11 @@ public class Rule {
     private double takeProfit;
     private Condition condition;
 
+    public Rule(double stopLoss,double takeProfit,Condition condition){
+        this.stopLoss=stopLoss;
+        this.takeProfit=takeProfit;
+        this.condition=condition;
+    }
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
