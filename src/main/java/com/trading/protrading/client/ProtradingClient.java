@@ -2,6 +2,8 @@ package com.trading.protrading.client;
 
 import com.trading.protrading.client.commands.Command;
 import com.trading.protrading.client.commands.LoginCommand;
+import com.trading.protrading.client.commands.MainMenuCommand;
+import com.trading.protrading.client.commands.PreloginMenuCommand;
 
 import java.io.*;
 import java.net.http.HttpClient;
@@ -34,23 +36,18 @@ public class ProtradingClient {
     }
 
     public void run() {
-        HttpClient client = HttpClient.newHttpClient();
-        String line = "";
+       HttpClient client = HttpClient.newHttpClient();
+       String url = this.getFullBaseUrl();
 
         try {
-            while (!this.storage.isUserLoggedIn()) {
+            new PreloginMenuCommand(client, this.writer,this.reader, this.storage).run(url);
 
+            new MainMenuCommand(client, this.writer,this.reader, this.storage).run(url);
 
-
-                Command login = new LoginCommand(client, this.writer, this.reader, this.storage);
-
-                login.run(this.getFullBaseUrl());
-
-
-            }
         } catch (IOException e) {
             e.printStackTrace();
-            // this.writer.write("An input/output exception occurred while reading line.\n");
         }
+
+
     }
 }
