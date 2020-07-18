@@ -3,8 +3,14 @@ package com.trading.protrading.client.models;
 import java.util.List;
 
 public class Strategy {
+
     private String name;
     private List<Rule> rules;
+
+    public Strategy(String name, List<Rule> rules) {
+        this.name = name;
+        this.rules = rules;
+    }
 
     @Override
     public String toString() {
