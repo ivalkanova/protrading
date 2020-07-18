@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.Collection;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -53,13 +55,16 @@ public class BacktestingService {
    //     return null;
    // }
 
-    public Collection<Report> getReports(String username, String strategy, int countOfReports)
-            throws StrategyNotFoundException {
-        return null;
+    public Collection<Report> getReports(String username, String strategy) {
+        return this.reportRepository.findAllByStrategy_NameAndStrategy_User_UserName(strategy, username);
     }
 
     public Report getReport(UUID reportId) throws ReportNotFoundException {
-        return null;
+        Optional<Report> report = this.reportRepository.findFirstByPublicId(reportId);
+        if (report.isEmpty()) {
+            throw new ReportNotFoundException("Report with requested UUID was not found");
+        }
+        return report.get();
     }
 
     public ComparisonReport compareReports(UUID firstReportId, UUID secondReportId)
